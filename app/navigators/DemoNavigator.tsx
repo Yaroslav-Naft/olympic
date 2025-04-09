@@ -4,7 +4,7 @@ import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "@/i18n"
-import { DemoCommunityScreen, DemoShowroomScreen, DemoDebugScreen } from "../screens"
+import { DemoCommunityScreen, DemoShowroomScreen, DemoDebugScreen, DemoHomeScreen } from "../screens"
 import { DemoPodcastListScreen } from "../screens/DemoPodcastListScreen"
 import type { ThemedStyle } from "@/theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
@@ -12,9 +12,11 @@ import { useAppTheme } from "@/utils/useAppTheme"
 
 export type DemoTabParamList = {
   DemoCommunity: undefined
+  DemoHome: undefined
   DemoShowroom: { queryIndex?: string; itemIndex?: string }
   DemoDebug: undefined
   DemoPodcastList: undefined
+
 }
 
 /**
@@ -55,6 +57,17 @@ export function DemoNavigator() {
         tabBarItemStyle: themed($tabBarItem),
       }}
     >
+      <Tab.Screen
+        name="DemoHome"
+        component={DemoHomeScreen}
+        options={{
+          tabBarLabel: translate("demoNavigator:homeTab"),
+          tabBarIcon: ({ focused }) => (
+            <Icon icon="community" color={focused ? colors.tint : colors.tintInactive} size={30} />
+          ),
+        }}
+      />
+
       <Tab.Screen
         name="DemoShowroom"
         component={DemoShowroomScreen}

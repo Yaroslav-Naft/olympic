@@ -104,6 +104,7 @@ interface ListItemActionProps {
  * @param {ListItemProps} props - The props for the `ListItem` component.
  * @returns {JSX.Element} The rendered `ListItem` component.
  */
+//1. Type fo the forwardRef & Type of Props passed 
 export const ListItem = forwardRef<View, ListItemProps>(function ListItem(
   props: ListItemProps,
   ref,

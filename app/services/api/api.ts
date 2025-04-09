@@ -74,6 +74,25 @@ export class Api {
       return { kind: "bad-data" }
     }
   }
+
+  async getPosts(): Promise<{ kind: "ok"; data: Post[] } | { kind: "bad-data" }> {
+    // make the api call to JSONPlaceholder
+    const response: ApiResponse<Post[]> = await this.apisauce.get('https://jsonplaceholder.typicode.com/posts')
+
+    // transform the data into the format we are expecting
+    try {
+      const posts = response.data
+      if (!posts) throw new Error("No data received")
+
+      return { kind: "ok", data: posts }
+    } catch (error: unknown) {
+      if (__DEV__) {
+        const e = error as Error
+        console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+      }
+      return { kind: "bad-data" }
+    }
+  }
 }
 
 // Singleton instance of the API for convenience

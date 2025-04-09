@@ -15,8 +15,8 @@ const reactNativeLiveLogo = require("../../assets/images/demo/rnl-logo.png")
 const reactNativeRadioLogo = require("../../assets/images/demo/rnr-logo.png")
 const reactNativeNewsletterLogo = require("../../assets/images/demo/rnn-logo.png")
 
-export const DemoCommunityScreen: FC<DemoTabScreenProps<"DemoCommunity">> =
-  function DemoCommunityScreen(_props) {
+export const DemoHomeScreen: FC<DemoTabScreenProps<"DemoHome">> =
+  function DemoHomeScreen(_props) {
     const { themed } = useAppTheme()
     const [posts, setPosts] = useState<Post[]>([])
     const [isLoading, setIsLoading] = useState(false)

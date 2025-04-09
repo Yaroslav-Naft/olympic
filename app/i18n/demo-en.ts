@@ -20,6 +20,7 @@ export const demoEn = {
         description: "The component can be styled easily.",
       },
     },
+
   },
   demoTextField: {
     description: "TextField component allows for the entering and editing of text.",

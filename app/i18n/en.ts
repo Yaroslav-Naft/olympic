@@ -9,9 +9,9 @@ const en = {
   },
   welcomeScreen: {
     postscript:
-      "psst  — This probably isn't what your app looks like. (Unless your designer handed you these screens, and in that case, ship it!)",
-    readyForLaunch: "Your app, almost ready for launch!",
-    exciting: "(ohh, this is exciting!)",
+      "This application is the property of Olympic Controls Inc. Unauthorized use, reproduction, distribution, or modification of any part of this application is strictly prohibited. All rights reserved",
+    readyForLaunch: "Welcome to the olympic app!",
+    exciting: "Developed By Yaro & Tommy 🤗",
     letsGo: "Let's go!",
   },
   errorScreen: {
@@ -45,12 +45,13 @@ const en = {
   },
   demoNavigator: {
     componentsTab: "Components",
-    debugTab: "Debug",
+    homeTab: "Home",
+    debugTab: "debug",
     communityTab: "Community",
-    podcastListTab: "Podcast",
+    podcastListTab: "Settings",
   },
   demoCommunityScreen: {
-    title: "Connect with the community",
+    title: "Olympic Controls",
     tagLine:
       "Plug in to Infinite Red's community of React Native engineers and level up your app development with us!",
     joinUsOnSlackTitle: "Join us on Slack",

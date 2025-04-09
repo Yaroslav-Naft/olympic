@@ -29,7 +29,10 @@
     "ios": {
       "icon": "./assets/images/app-icon-ios.png",
       "supportsTablet": true,
-      "bundleIdentifier": "com.olympic"
+      "bundleIdentifier": "com.olympic",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "web": {
       "favicon": "./assets/images/app-icon-web-favicon.png",
@@ -50,6 +53,11 @@
     ],
     "experiments": {
       "tsconfigPaths": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8700aa96-8924-4535-a2e3-d322ff589c99"
+      }
     }
   },
   "ignite": {
