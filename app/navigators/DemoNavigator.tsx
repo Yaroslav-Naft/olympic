@@ -114,6 +114,8 @@ export function DemoNavigator() {
 
       {/* NOTE: Keep this tab for troubleshooting */}
       {/* <Tab.Screen
+      {/* NOTE: Keep this tab for troubleshooting */}
+      {/* <Tab.Screen
         name="DemoDebug"
         component={DemoDebugScreen}
         options={{
@@ -122,6 +124,7 @@ export function DemoNavigator() {
             <Icon icon="debug" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),
         }}
+      /> */}
       /> */}
     </Tab.Navigator>
   )
