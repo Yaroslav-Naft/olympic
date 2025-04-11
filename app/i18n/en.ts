@@ -46,14 +46,23 @@ const en = {
   demoNavigator: {
     componentsTab: "Components",
     homeTab: "Home",
+    calendarTab: "Calendar",
+    comfortTab: "Comfort",
+    settingsTab: "Settings",
     debugTab: "debug",
     communityTab: "Community",
     podcastListTab: "Settings",
   },
+  navigator: {
+    homeTab: "Home",
+    calendarTab: "Calendar",
+    comfortTab: "Comfort",
+    settingsTab: "Settings",
+  },
   demoCommunityScreen: {
-    title: "Olympic Controls",
+    title: "Suite 123\nTenant: Fortis BC",
     tagLine:
-      "Plug in to Infinite Red's community of React Native engineers and level up your app development with us!",
+      "Welcome to Your Portal!🤗🤗🤗",
     joinUsOnSlackTitle: "Join us on Slack",
     joinUsOnSlack:
       "Wish there was a place to connect with React Native engineers around the world? Join the conversation in the Infinite Red Community Slack! Our growing community is a safe space to ask questions, learn from others, and grow your network.",
@@ -72,6 +81,11 @@ const en = {
     hireUs:
       "Whether it's running a full project or getting teams up to speed with our hands-on training, Infinite Red can help with just about any React Native project.",
     hireUsLink: "Send us a message",
+  },
+  homeScreen: {
+    title: "Suite 123\nTenant: Fortis BC",
+    tagLine:
+      "Welcome to Your Portal!🤗🤗🤗",
   },
   demoShowroomScreen: {
     jumpStart: "Components to jump start your project!",
