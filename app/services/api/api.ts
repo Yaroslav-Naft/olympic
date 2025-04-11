@@ -93,6 +93,23 @@ export class Api {
       return { kind: "bad-data" }
     }
   }
+
+  async getTemp(): Promise<{ kind: "ok"; data: any } | { kind: "bad-data" }> {
+    const response: ApiResponse<Post[]> = await this.apisauce.get('https://olympiciot.com/temp')
+    try {
+      const data = response.data
+      if (!data) throw new Error("No data received")
+
+      return { kind: "ok", data }
+    } catch (error: unknown) {
+      if (__DEV__) {
+        const e = error as Error
+        console.tron.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+      }
+      return { kind: "bad-data" }
+    }
+  }
+
 }
 
 // Singleton instance of the API for convenience

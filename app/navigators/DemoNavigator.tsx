@@ -13,6 +13,9 @@ import { useAppTheme } from "@/utils/useAppTheme"
 export type DemoTabParamList = {
   DemoCommunity: undefined
   DemoHome: undefined
+  DemoCalendar: undefined
+  DemoComfort: undefined
+  DemoSettings: undefined
   DemoShowroom: { queryIndex?: string; itemIndex?: string }
   DemoDebug: undefined
   DemoPodcastList: undefined
@@ -63,7 +66,38 @@ export function DemoNavigator() {
         options={{
           tabBarLabel: translate("demoNavigator:homeTab"),
           tabBarIcon: ({ focused }) => (
-            <Icon icon="community" color={focused ? colors.tint : colors.tintInactive} size={30} />
+            <Icon icon="home" color={focused ? colors.tint : colors.tintInactive} size={30} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="DemoCalendar"
+        component={DemoHomeScreen}
+        options={{
+          tabBarLabel: translate("demoNavigator:calendarTab"),
+          tabBarIcon: ({ focused }) => (
+            <Icon icon="calendar" color={focused ? colors.tint : colors.tintInactive} size={30} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="DemoComfort"
+        component={DemoHomeScreen}
+        options={{
+          tabBarLabel: translate("demoNavigator:comfortTab"),
+          tabBarIcon: ({ focused }) => (
+            <Icon icon="list" color={focused ? colors.tint : colors.tintInactive} size={30} />
+          ),
+        }}
+
+      />
+      <Tab.Screen
+        name="DemoSettings"
+        component={DemoHomeScreen}
+        options={{
+          tabBarLabel: translate("demoNavigator:settingsTab"),
+          tabBarIcon: ({ focused }) => (
+            <Icon icon="setting" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),
         }}
       />
@@ -74,35 +108,13 @@ export function DemoNavigator() {
         options={{
           tabBarLabel: translate("demoNavigator:componentsTab"),
           tabBarIcon: ({ focused }) => (
-            <Icon icon="components" color={focused ? colors.tint : colors.tintInactive} size={30} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="DemoCommunity"
-        component={DemoCommunityScreen}
-        options={{
-          tabBarLabel: translate("demoNavigator:communityTab"),
-          tabBarIcon: ({ focused }) => (
             <Icon icon="community" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),
         }}
       />
 
-      <Tab.Screen
-        name="DemoPodcastList"
-        component={DemoPodcastListScreen}
-        options={{
-          tabBarAccessibilityLabel: translate("demoNavigator:podcastListTab"),
-          tabBarLabel: translate("demoNavigator:podcastListTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="podcast" color={focused ? colors.tint : colors.tintInactive} size={30} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
+      {/* NOTE: Keep this tab for troubleshooting */}
+      {/* <Tab.Screen
         name="DemoDebug"
         component={DemoDebugScreen}
         options={{
@@ -111,7 +123,7 @@ export function DemoNavigator() {
             <Icon icon="debug" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   )
 }
