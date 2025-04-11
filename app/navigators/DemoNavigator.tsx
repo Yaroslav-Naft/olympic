@@ -4,19 +4,21 @@ import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "@/i18n"
-import { DemoCommunityScreen, DemoShowroomScreen, DemoDebugScreen, DemoHomeScreen } from "../screens"
+import { DemoCommunityScreen, DemoShowroomScreen, DemoDebugScreen } from "../screens"
 import { DemoPodcastListScreen } from "../screens/DemoPodcastListScreen"
 import type { ThemedStyle } from "@/theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { HomeScreen } from "@/screens/HomeScreen"
 
 export type DemoTabParamList = {
-  DemoCommunity: undefined
-  DemoHome: undefined
+  Community: undefined
+  Home: undefined
+  Calendar: undefined
+  Comfort: undefined
+  Settings: undefined
   DemoShowroom: { queryIndex?: string; itemIndex?: string }
-  DemoDebug: undefined
   DemoPodcastList: undefined
-
 }
 
 /**
@@ -58,12 +60,43 @@ export function DemoNavigator() {
       }}
     >
       <Tab.Screen
-        name="DemoHome"
-        component={DemoHomeScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
-          tabBarLabel: translate("demoNavigator:homeTab"),
+          tabBarLabel: translate("navigator:homeTab"),
           tabBarIcon: ({ focused }) => (
-            <Icon icon="community" color={focused ? colors.tint : colors.tintInactive} size={30} />
+            <Icon icon="home" color={focused ? colors.tint : colors.tintInactive} size={30} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Calendar"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: translate("navigator:calendarTab"),
+          tabBarIcon: ({ focused }) => (
+            <Icon icon="calendar" color={focused ? colors.tint : colors.tintInactive} size={30} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Comfort"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: translate("navigator:comfortTab"),
+          tabBarIcon: ({ focused }) => (
+            <Icon icon="list" color={focused ? colors.tint : colors.tintInactive} size={30} />
+          ),
+        }}
+
+      />
+      <Tab.Screen
+        name="Settings"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: translate("navigator:settingsTab"),
+          tabBarIcon: ({ focused }) => (
+            <Icon icon="setting" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),
         }}
       />
@@ -74,35 +107,13 @@ export function DemoNavigator() {
         options={{
           tabBarLabel: translate("demoNavigator:componentsTab"),
           tabBarIcon: ({ focused }) => (
-            <Icon icon="components" color={focused ? colors.tint : colors.tintInactive} size={30} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="DemoCommunity"
-        component={DemoCommunityScreen}
-        options={{
-          tabBarLabel: translate("demoNavigator:communityTab"),
-          tabBarIcon: ({ focused }) => (
             <Icon icon="community" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),
         }}
       />
 
-      <Tab.Screen
-        name="DemoPodcastList"
-        component={DemoPodcastListScreen}
-        options={{
-          tabBarAccessibilityLabel: translate("demoNavigator:podcastListTab"),
-          tabBarLabel: translate("demoNavigator:podcastListTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="podcast" color={focused ? colors.tint : colors.tintInactive} size={30} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
+      {/* NOTE: Keep this tab for troubleshooting */}
+      {/* <Tab.Screen
         name="DemoDebug"
         component={DemoDebugScreen}
         options={{
@@ -111,7 +122,7 @@ export function DemoNavigator() {
             <Icon icon="debug" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   )
 }
