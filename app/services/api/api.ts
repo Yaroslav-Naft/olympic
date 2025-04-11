@@ -41,50 +41,13 @@ export class Api {
     })
   }
 
-  /**
-   * Gets a list of recent React Native Radio episodes.
-   */
-  async getEpisodes(): Promise<{ kind: "ok"; episodes: EpisodeSnapshotIn[] } | GeneralApiProblem> {
-    // make the api call
-    const response: ApiResponse<ApiFeedResponse> = await this.apisauce.get(
-      `api.json?rss_url=https%3A%2F%2Ffeeds.simplecast.com%2FhEI_f9Dx`,
-    )
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
-    }
-
-    // transform the data into the format we are expecting
+  async getTemp(): Promise<{ kind: "ok"; data: unknown } | { kind: "bad-data" }> {
+    const response: ApiResponse<Post[]> = await this.apisauce.get('https://olympiciot.com/temp')
     try {
-      const rawData = response.data
+      const data = response.data
+      if (!data) throw new Error("No data received")
 
-      // This is where we transform the data into the shape we expect for our MST model.
-      const episodes: EpisodeSnapshotIn[] =
-        rawData?.items.map((raw) => ({
-          ...raw,
-        })) ?? []
-
-      return { kind: "ok", episodes }
-    } catch (e) {
-      if (__DEV__ && e instanceof Error) {
-        console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
-      }
-      return { kind: "bad-data" }
-    }
-  }
-
-  async getPosts(): Promise<{ kind: "ok"; data: Post[] } | { kind: "bad-data" }> {
-    // make the api call to JSONPlaceholder
-    const response: ApiResponse<Post[]> = await this.apisauce.get('https://jsonplaceholder.typicode.com/posts')
-
-    // transform the data into the format we are expecting
-    try {
-      const posts = response.data
-      if (!posts) throw new Error("No data received")
-
-      return { kind: "ok", data: posts }
+      return { kind: "ok", data }
     } catch (error: unknown) {
       if (__DEV__) {
         const e = error as Error
@@ -93,6 +56,7 @@ export class Api {
       return { kind: "bad-data" }
     }
   }
+
 }
 
 // Singleton instance of the API for convenience
