@@ -125,7 +125,6 @@ export function DemoNavigator() {
           ),
         }}
       /> */}
-      /> */}
     </Tab.Navigator>
   )
 }
