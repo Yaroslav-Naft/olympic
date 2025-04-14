@@ -10,7 +10,7 @@ module.exports = {
     "plugin:react/jsx-runtime",
     "prettier",
   ],
-  plugins: ["reactotron", "prettier"],
+  plugins: ["reactotron", "prettier", "@typescript-eslint", "react-hooks"],
   rules: {
     "prettier/prettier": "error",
     // typescript-eslint

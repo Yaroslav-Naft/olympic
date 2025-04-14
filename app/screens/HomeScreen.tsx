@@ -1,5 +1,13 @@
 import React, { FC, useEffect, useState } from "react"
-import { ActivityIndicator, Image, ImageStyle, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import {
+  ActivityIndicator,
+  Image,
+  ImageStyle,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
 import { Card, Screen, Switch, SwitchToggleProps, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { $styles, colors } from "../theme"
@@ -8,12 +16,10 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { api } from "../services/api"
 import { Toggle } from "@/components/Toggle/Toggle"
 
-
 export function TempSwitch(props: SwitchToggleProps) {
   const [val, setVal] = useState(props.value || false)
   return <Switch value={val} onPress={() => setVal(!val)} />
 }
-
 
 export const HomeScreen: FC<DemoTabScreenProps<"Home" | "Calendar" | "Comfort" | "Settings">> =
   function HomeScreen(_props) {
@@ -52,7 +58,7 @@ export const HomeScreen: FC<DemoTabScreenProps<"Home" | "Calendar" | "Comfort" |
         ) : (
           <View>
             <Card
-              heading={`${temp != null && !isNaN(temp) ? Math.round(temp) : '--'}°C`}
+              heading={`${temp != null && !isNaN(temp) ? Math.round(temp) : "--"}°C`}
               style={themed($temperatureCard)}
               headingStyle={themed($temperatureHeading)}
               contentTx="homeScreen:indoorTemp"
@@ -65,10 +71,10 @@ export const HomeScreen: FC<DemoTabScreenProps<"Home" | "Calendar" | "Comfort" |
               FooterComponent={
                 <View style={$footerContainer}>
                   <View style={$footerItem}>
-                    <Text style={themed($footerText)}>🌥 32°C  |</Text>
+                    <Text style={themed($footerText)}>🌥 32°C |</Text>
                   </View>
                   <View style={$footerItem}>
-                    <Text style={themed($footerText)}>💨 55%  |</Text>
+                    <Text style={themed($footerText)}>💨 55% |</Text>
                   </View>
                   <View style={$footerItem}>
                     <Text style={themed($footerText)}>🕒 Thu 24 Nov | 5:45 PM</Text>
@@ -78,7 +84,7 @@ export const HomeScreen: FC<DemoTabScreenProps<"Home" | "Calendar" | "Comfort" |
             />
             <Card
               heading="24°C"
-              style={[themed($temperatureCard), { backgroundColor: '#f5f5f5' }]}
+              style={[themed($temperatureCard), { backgroundColor: "#f5f5f5" }]}
               headingStyle={themed($temperatureHeading)}
               contentTx="homeScreen:indoorTemp"
               contentStyle={themed($temperatureContent)}
@@ -111,7 +117,7 @@ const $temperatureCard: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
 })
 
 const $powerButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  position: 'absolute',
+  position: "absolute",
   right: spacing.sm,
   top: spacing.sm,
   backgroundColor: colors.palette.neutral200,
@@ -119,8 +125,8 @@ const $powerButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   borderRadius: 20,
   width: 40,
   height: 40,
-  justifyContent: 'center',
-  alignItems: 'center'
+  justifyContent: "center",
+  alignItems: "center",
 })
 
 const $temperatureHeading: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
@@ -153,8 +159,8 @@ const $footerText: ThemedStyle<TextStyle> = ({ colors }) => ({
 })
 
 const $controlsContainer: ViewStyle = {
-  flexDirection: 'row',
-  position: 'absolute',
+  flexDirection: "row",
+  position: "absolute",
   right: 16,
   top: 16,
   gap: 8,
@@ -165,13 +171,13 @@ const $controlButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   height: 32,
   borderRadius: 16,
   backgroundColor: colors.palette.neutral200,
-  justifyContent: 'center',
-  alignItems: 'center',
+  justifyContent: "center",
+  alignItems: "center",
 })
 
 const $controlText: ThemedStyle<TextStyle> = ({ colors }) => ({
   fontSize: 24,
-  fontWeight: '500',
+  fontWeight: "500",
   color: colors.text,
 })
 
@@ -187,14 +193,12 @@ const $tempButton: ThemedStyle<TextStyle> = ({ spacing }) => ({
   marginBottom: spacing.xl,
 })
 
-
 const $title: ThemedStyle<TextStyle> = ({ spacing }) => ({
   marginBottom: spacing.xl,
-
 })
 const $controlContainer: ThemedStyle<TextStyle> = ({ spacing }) => ({
-  flexDirection: 'row',
-  position: 'absolute',
+  flexDirection: "row",
+  position: "absolute",
   right: 16,
   top: 16,
   gap: 8,
