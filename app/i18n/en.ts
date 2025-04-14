@@ -86,6 +86,7 @@ const en = {
     title: "Suite 123\nTenant: Fortis BC",
     tagLine:
       "Welcome to Your Portal!🤗🤗🤗",
+    indoorTemp: "Indoor Temperature"
   },
   demoShowroomScreen: {
     jumpStart: "Components to jump start your project!",

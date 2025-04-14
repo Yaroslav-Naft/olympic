@@ -22,24 +22,23 @@ export const DemoCommunityScreen: FC<DemoTabScreenProps<"DemoCommunity">> =
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState("")
 
-    useEffect(() => {
-      async function fetchPosts() {
-        setIsLoading(true)
-        setError("")
+    // useEffect(() => {
+    //   async function fetchPosts() {
+    //     setIsLoading(true)
+    //     setError("")
+    
         
-        const result = await api.getPosts()
+    //     if (result.kind === "ok") {
+    //       setPosts(result.data)
+    //     } else {
+    //       setError("Failed to load posts")
+    //     }
         
-        if (result.kind === "ok") {
-          setPosts(result.data)
-        } else {
-          setError("Failed to load posts")
-        }
-        
-        setIsLoading(false)
-      }
+    //     setIsLoading(false)
+    //   }
 
-      fetchPosts()
-    }, [])
+    //   fetchPosts()
+    // }, [])
 
     return (
       <Screen preset="scroll" contentContainerStyle={$styles.container} safeAreaEdges={["top"]}>
