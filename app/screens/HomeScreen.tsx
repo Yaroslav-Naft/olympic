@@ -1,21 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  ImageStyle,
-  TextStyle,
-  TouchableOpacitry,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { ActivityIndicator, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Card, Icon, Screen, Switch, SwitchToggleProps, Text } from '../components';
 import { DemoTabScreenProps } from '../navigators/DemoNavigator';
 import { $styles, colors } from '../theme';
 import type { ThemedStyle } from '@/theme';
 import { useAppTheme } from '@/utils/useAppTheme';
 import { api } from '../services/api';
-import { Toggle } from '@/components/Toggle/Toggle';
 
 export function TempSwitch(props: SwitchToggleProps) {
   const [val, setVal] = useState(props.value || false);
@@ -58,6 +48,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
           <Text style={$error}>{error}</Text>
         ) : (
           <View>
+            <Card />
             <Card
               heading={`${temp != null && !isNaN(temp) ? Math.round(temp) : '--'}°C`}
               style={themed($temperatureCard)}
@@ -83,26 +74,33 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                 </View>
               }
             />
-            <Card
-              // heading="24°C"
-              style={[themed($temperatureCard)]}
-              // headingStyle={themed($temperatureHeading)}
-              // contentTx="homeScreen:indoorTemp"
-              // contentStyle={themed($temperatureContent)}
-              // RightComponent={
-              //   <View style={$controlsContainer}>
-              //     <TouchableOpacity style={themed($controlButton)}>
-              //       <Text style={themed($buttonText)}>-</Text>
-              //     </TouchableOpacity>
-              //     <TouchableOpacity style={themed($controlButton)}>
-              //       <Text style={themed($buttonText)}>+</Text>
-              //     </TouchableOpacity>
-              //   </View>
-              // }
-            >
-              <Text style={themed($label)}>Temperature Set Point</Text>
+            <Card style={[themed($temperatureCard)]}>
+              <View style={themed($tempSetpointContainer)}>
+                <Text style={themed($label)}>Temperature Set Point</Text>
+              </View>
               <View style={themed($contentContainer)}>
-                <Text style={themed($temperature)}>24°C</Text>
+                <View
+                  style={{
+                    backgroundColor: 'transparent',
+                    overflow: 'visible',
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 40,
+                      fontWeight: 'bold',
+                      fontFamily: 'System',
+                      color: '#374151',
+                      lineHeight: 48,
+                      includeFontPadding: false,
+                      textAlignVertical: 'center',
+                      backgroundColor: 'transparent',
+                      paddingTop: 0,
+                    }}
+                  >
+                    24°C
+                  </Text>
+                </View>
                 <View style={themed($controlsContainer)}>
                   <TouchableOpacity style={themed($controlButton)}>
                     <Text style={themed($buttonText)}>−</Text>
@@ -112,28 +110,29 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                   </TouchableOpacity>
                 </View>
               </View>
-              {/* <View style={themed($sliderContainer)}>
-                <View style={themed($blueSlider)} />
-                <View style={themed($graySlider)} />
-              </View> */}
+              {/* Add slider here later */}
 
               <View style={themed($bottomContainer)}>
-                <TouchableOpacity style={themed($iconButton)}>
-                  <Icon icon="schedule" size={20} />
-                  <Text style={themed($coolText)}>Cool</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={themed($iconButton)}>
-                  <Text style={themed($iconText)}>A</Text>
-                  <Text style={themed($coolText)}>Cool</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={themed($iconButton)}>
-                  <Icon icon="settings" size={20} />
-                  <Text style={themed($coolText)}>Heat</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={themed($coolButton)}>
-                  <Icon icon="snow" size={16} style={themed($coolIcon)} />
-                  <Text style={themed($coolText)}>Cool</Text>
-                </TouchableOpacity>
+                <View style={themed($iconButtonContainer)}>
+                  <TouchableOpacity style={themed($iconButton)}>
+                    <Icon icon="power" color="#374151" size={15} />
+                  </TouchableOpacity>
+                </View>
+                <View style={themed($iconButtonContainer)}>
+                  <TouchableOpacity style={themed($iconButton)}>
+                    <Icon icon="a" color="#374151" size={15} />
+                  </TouchableOpacity>
+                </View>
+                <View style={themed($iconButtonContainer)}>
+                  <TouchableOpacity style={themed($iconButton)}>
+                    <Icon icon="sun" color="#374151" size={15} />
+                  </TouchableOpacity>
+                </View>
+                <View style={themed($iconButtonContainer)}>
+                  <TouchableOpacity style={themed($iconButton)}>
+                    <Icon icon="snow" size={15} color="#374151" />
+                  </TouchableOpacity>
+                </View>
               </View>
             </Card>
           </View>
@@ -141,6 +140,10 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
       </Screen>
     );
   };
+
+const $tempSetpointContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+  marginBottom: 16,
+});
 
 const $temperatureCard: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   backgroundColor: 'white',
@@ -152,18 +155,6 @@ const $temperatureCard: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   shadowOpacity: 0.05,
   shadowRadius: 8,
   elevation: 2,
-});
-
-const $sliderContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  width: '100%',
-  padding: spacing.md,
-  borderRadius: spacing.md,
-  marginTop: spacing.sm,
-  minHeight: 200, // Add explicit height to make it visible
-  borderWidth: 1, // Add border to see the container boundaries
-  borderColor: colors.palette.neutral300,
-  alignItems: 'center', // Center children horizontally
-  justifyContent: 'center', // Center children vertically
 });
 
 const $sliderStyle: ThemedStyle<ViewStyle> = () => ({
@@ -213,17 +204,22 @@ const $footerText: ThemedStyle<TextStyle> = ({ colors }) => ({
   color: colors.textDim,
 });
 
-const $controlsContainer: ViewStyle = {
+const $controlsContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   flexDirection: 'row',
   position: 'absolute',
-  right: 16,
-  top: 16,
-  gap: 8,
-};
+  verticalAlign: 'center',
+  right: 0,
+  top: 0,
+  gap: 12,
+});
+
+const $iconButtonContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+  // padding: 30,
+});
 
 const $controlButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  width: 40,
-  height: 40,
+  width: 45,
+  height: 45,
   borderRadius: 8,
   borderWidth: 1, // Add border
   borderColor: colors.palette.neutral200,
@@ -266,7 +262,12 @@ const $error: TextStyle = {
 const $iconButton: ThemedStyle<ViewStyle> = ({ colors }) => ({
   width: 36,
   height: 36,
-  borderRadius: 18,
+  borderRadius: 10,
+  paddingLeft: 30,
+  paddingRight: 30,
+  paddingTop: 10,
+  borderWidth: 1, // Add border
+  borderColor: colors.palette.neutral200,
   backgroundColor: colors.palette.neutral100,
   justifyContent: 'center',
   alignItems: 'center',
@@ -279,14 +280,21 @@ const $iconText: ThemedStyle<TextStyle> = ({ colors }) => ({
 });
 
 const $coolButton: ThemedStyle<ViewStyle> = () => ({
-  marginLeft: 'auto',
   flexDirection: 'row',
   alignItems: 'center',
-  backgroundColor: '#F5F5F5',
-  paddingHorizontal: 12,
+  backgroundColor: '#f3f4f6',
+  paddingHorizontal: 16,
   paddingVertical: 8,
-  borderRadius: 18,
-  gap: 4,
+  borderRadius: 24,
+  gap: 6,
+  borderWidth: 1,
+  borderColor: '#e5e7eb',
+});
+
+const $testContainer: ThemedStyle<ViewStyle> = () => ({
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
 });
 
 const $coolIcon: ThemedStyle<TextStyle> = {
@@ -319,31 +327,39 @@ const $graySlider: ThemedStyle<ViewStyle> = () => ({
 const $bottomContainer: ThemedStyle<ViewStyle> = () => ({
   flexDirection: 'row',
   alignItems: 'center',
-  gap: 8,
+  justifyContent: 'space-between',
+  // marginLeft: 16,
+  // marginRight: 16,
 });
 
 const $label: ThemedStyle<TextStyle> = ({ colors }) => ({
   fontSize: 14,
-  color: colors.textDim,
+  color: '#6b7280',
   marginBottom: 8,
 });
 
 const $temperature: ThemedStyle<TextStyle> = ({ colors }) => ({
-  fontSize: 32,
+  fontSize: 40,
+  fontFamily: 'System',
+  letterSpacing: 0.5,
+  includeFontPadding: false,
+  // textAlign: 'left',
   fontWeight: '600',
-  color: colors.text,
+  color: '#374151',
 });
 
-//TODO: implement later
-{
-  /* <View style={themed($sliderContainer)}>
-              <Slider
-                value={temp ?? 24}
-                min={16}
-                max={30}
-                step={0.5}
-                style={{ width: 200, height: 40 }}
-                onChange={val => setTemp(val)}
-              />
-            </View> */
-}
+const $sliderContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+  width: '100%',
+  padding: spacing.md,
+  borderRadius: spacing.md,
+  marginTop: spacing.sm,
+  minHeight: 200, // Add explicit height to make it visible
+  borderWidth: 1, // Add border to see the container boundaries
+  borderColor: colors.palette.neutral300,
+  alignItems: 'center', // Center children horizontally
+  justifyContent: 'center', // Center children vertically
+});
+
+//Later
+//Remove unecessary code
+//Break down into own components
