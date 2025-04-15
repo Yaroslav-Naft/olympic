@@ -6,6 +6,7 @@ import { $styles, colors } from '../theme';
 import type { ThemedStyle } from '@/theme';
 import { useAppTheme } from '@/utils/useAppTheme';
 import { api } from '../services/api';
+import { ProfileCard } from '@/components/ProfileCard';
 
 export function TempSwitch(props: SwitchToggleProps) {
   const [val, setVal] = useState(props.value || false);
@@ -40,7 +41,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
 
     return (
       <Screen preset="scroll" contentContainerStyle={$styles.container} safeAreaEdges={['top']}>
-        <Text preset="heading" tx="homeScreen:title" style={themed($title)} />
+        <Text preset="heading" size="md" tx="ECY - STAT" style={themed($title)} />
         {/* <Text tx="homeScreen:tagLine" style={themed($tagline)} /> */}
         {isLoading ? (
           <ActivityIndicator size="large" style={$spinner} />
@@ -48,7 +49,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
           <Text style={$error}>{error}</Text>
         ) : (
           <View>
-            <Card />
+            <ProfileCard iconType="user" size={50} txContent="Hello 👋" profileName="Fortis BC" />
             <Card
               heading={`${temp != null && !isNaN(temp) ? Math.round(temp) : '--'}°C`}
               style={themed($temperatureCard)}
@@ -247,6 +248,7 @@ const $buttonText: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
 
 const $title: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
   marginBottom: spacing.sm,
+  fontFamily: 'System',
 });
 
 const $spinner: ViewStyle = {

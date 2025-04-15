@@ -118,6 +118,8 @@ export const iconRegistry = {
   a: require('../../assets/icons/a-solid.png'),
   snow: require('../../assets/icons/snowflake-solid.png'),
   sun: require('../../assets/icons/sun-regular.png'),
+  user: require('../../assets/icons/circle-user-solid.png'),
+  olympic: require('../../assets/icons/olympic.png'),
 };
 
 const $imageStyleBase: ImageStyle = {
