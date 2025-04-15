@@ -54,7 +54,6 @@ const $nameStyling: ThemedStyle<TextStyle> = ({ colors }) => ({
 });
 
 const $iconButtonContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  // padding: 30,
   paddingRight: 10,
 });
 

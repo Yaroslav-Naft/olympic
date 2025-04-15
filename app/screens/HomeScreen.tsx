@@ -7,6 +7,7 @@ import type { ThemedStyle } from '@/theme';
 import { useAppTheme } from '@/utils/useAppTheme';
 import { api } from '../services/api';
 import { ProfileCard } from '@/components/ProfileCard';
+import Slider from '@react-native-community/slider';
 
 export function TempSwitch(props: SwitchToggleProps) {
   const [val, setVal] = useState(props.value || false);
@@ -42,7 +43,6 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
     return (
       <Screen preset="scroll" contentContainerStyle={$styles.container} safeAreaEdges={['top']}>
         <Text preset="heading" size="md" tx="ECY - STAT" style={themed($title)} />
-        {/* <Text tx="homeScreen:tagLine" style={themed($tagline)} /> */}
         {isLoading ? (
           <ActivityIndicator size="large" style={$spinner} />
         ) : error ? (
@@ -112,6 +112,13 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                 </View>
               </View>
               {/* Add slider here later */}
+              {/* <Slider
+                style={{ width: 200, height: 40 }}
+                minimumValue={0}
+                maximumValue={1}
+                minimumTrackTintColor="#FFFFFF"
+                maximumTrackTintColor="#000000"
+              /> */}
 
               <View style={themed($bottomContainer)}>
                 <View style={themed($iconButtonContainer)}>
