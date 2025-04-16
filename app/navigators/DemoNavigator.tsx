@@ -96,7 +96,7 @@ export function DemoNavigator() {
         options={{
           tabBarLabel: translate('navigator:settingsTab'),
           tabBarIcon: ({ focused }) => (
-            <Icon icon="setting" color={focused ? colors.tint : colors.tintInactive} size={30} />
+            <Icon icon="setting" color={focused ? 'white' : colors.tintInactive} size={30} />
           ),
         }}
       />

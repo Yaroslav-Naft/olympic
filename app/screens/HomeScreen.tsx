@@ -8,6 +8,7 @@ import { useAppTheme } from '@/utils/useAppTheme';
 import { api } from '../services/api';
 import { ProfileCard } from '@/components/ProfileCard';
 import Slider from '@react-native-community/slider';
+import { DeviceCard } from '@/components/DeviceCard';
 
 export function TempSwitch(props: SwitchToggleProps) {
   const [val, setVal] = useState(props.value || false);
@@ -143,6 +144,14 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                 </View>
               </View>
             </Card>
+            <DeviceCard image="meter" deviceName="Fortis BC Suite Meter">
+              <View>
+                <Text style={themed($label)}>Rate: 4 BTU/hr</Text>
+                <Text style={themed($label)}>Accum. Consumption: 100 BTU</Text>
+                <Text style={themed($label)}>Monthly Cost: 102.34 CAD</Text>
+                <Text style={themed($label)}>DCW Meter Consumption: 102L</Text>
+              </View>
+            </DeviceCard>
           </View>
         )}
       </Screen>
