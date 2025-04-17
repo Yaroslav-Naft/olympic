@@ -3,35 +3,35 @@
  * API endpoint, assuming it's a JSON object like we have.
  */
 export interface EpisodeItem {
-  title: string
-  pubDate: string
-  link: string
-  guid: string
-  author: string
-  thumbnail: string
-  description: string
-  content: string
+  title: string;
+  pubDate: string;
+  link: string;
+  guid: string;
+  author: string;
+  thumbnail: string;
+  description: string;
+  content: string;
   enclosure: {
-    link: string
-    type: string
-    length: number
-    duration: number
-    rating: { scheme: string; value: string }
-  }
-  categories: string[]
+    link: string;
+    type: string;
+    length: number;
+    duration: number;
+    rating: { scheme: string; value: string };
+  };
+  categories: string[];
 }
 
 export interface ApiFeedResponse {
-  status: string
+  status: string;
   feed: {
-    url: string
-    title: string
-    link: string
-    author: string
-    description: string
-    image: string
-  }
-  items: EpisodeItem[]
+    url: string;
+    title: string;
+    link: string;
+    author: string;
+    description: string;
+    image: string;
+  };
+  items: EpisodeItem[];
 }
 
 /**
@@ -41,24 +41,30 @@ export interface ApiConfig {
   /**
    * The URL of the api.
    */
-  url: string
+  url: string;
 
   /**
    * Milliseconds before we timeout the request.
    */
-  timeout: number
+  timeout: number;
 }
+// Define what you expect from the API - the raw data
 
 export interface Post {
-  id: number
-  title: string
-  body: string
-  userId: number
+  id: number;
+  title: string;
+  body: string;
+  userId: number;
 }
 
 export interface ApiTypes {
   getPosts: {
-    data: Post[]
-    kind: "ok"
-  }
+    data: Post[];
+    kind: 'ok';
+  };
+}
+
+//Temperature
+export interface TemperatureResponse {
+  data: string;
 }

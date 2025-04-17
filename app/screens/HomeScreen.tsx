@@ -1,14 +1,18 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Card, Icon, Screen, Switch, SwitchToggleProps, Text } from '../components';
 import { DemoTabScreenProps } from '../navigators/DemoNavigator';
-import { $styles, colors } from '../theme';
+import { $styles } from '../theme';
 import type { ThemedStyle } from '@/theme';
 import { useAppTheme } from '@/utils/useAppTheme';
-import { api } from '../services/api';
 import { ProfileCard } from '@/components/ProfileCard';
-import Slider from '@react-native-community/slider';
 import { DeviceCard } from '@/components/DeviceCard';
+import { useTemperature } from '@/components/hooks/api-queries/useTemperature';
+import { useTempSetpoint } from '@/components/hooks/api-queries/useTempSetpoint';
+import { useDateTime } from '@/components/hooks/api-queries/useDateTime';
+
+const meterImage = require('../../assets/images/meter.png');
+const sensor2 = require('../../assets/images/sensor2.jpg');
 
 export function TempSwitch(props: SwitchToggleProps) {
   const [val, setVal] = useState(props.value || false);
@@ -18,41 +22,43 @@ export function TempSwitch(props: SwitchToggleProps) {
 export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' | 'Settings'>> =
   function HomeScreen(_props) {
     const { themed } = useAppTheme();
-    const [temp, setTemp] = useState<number | null>();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+    const { temp, setTemp, fetchTemp, tempLoading } = useTemperature();
+    const {
+      tempSetpoint,
+      setTempSetpoint,
+      incrementTempSp,
+      decrementTempSp,
+      spLoading,
+      fetchTempSp,
+    } = useTempSetpoint();
+    const { dateTime, setDateTime, fetchDateTime, dateTimeLoading } = useDateTime();
+
+    const refreshAllData = useCallback(async () => {
+      try {
+        await Promise.all([fetchTemp(), fetchTempSp(), fetchDateTime()]);
+      } catch (err) {
+        console.error(`error fetching data ${err}`);
+      }
+    }, [fetchTemp, fetchTempSp, fetchDateTime]);
+
+    const isLoading = tempLoading || spLoading || dateTimeLoading;
 
     useEffect(() => {
-      async function fetchTemp() {
-        setIsLoading(true);
-        setError('');
-        const result = await api.getTemp();
-
-        if (result.kind === 'ok') {
-          setTemp(result.data);
-        } else {
-          setError('Failed to load Temperature data');
-          setTemp(null);
-        }
-
-        setIsLoading(false);
-      }
-
-      fetchTemp();
-    }, []);
+      refreshAllData();
+      const interval = setInterval(refreshAllData, 10000);
+      return () => clearInterval(interval);
+    }, [refreshAllData]);
 
     return (
       <Screen preset="scroll" contentContainerStyle={$styles.container} safeAreaEdges={['top']}>
-        <Text preset="heading" size="md" tx="ECY - STAT" style={themed($title)} />
+        <Text preset="heading" size="md" text="ECY - STAT" style={themed($title)} />
         {isLoading ? (
           <ActivityIndicator size="large" style={$spinner} />
-        ) : error ? (
-          <Text style={$error}>{error}</Text>
         ) : (
           <View>
             <ProfileCard iconType="user" size={50} txContent="Hello 👋" profileName="Fortis BC" />
             <Card
-              heading={`${temp != null && !isNaN(temp) ? Math.round(temp) : '--'}°C`}
+              heading={`${temp?.toFixed(2) ?? '--'}°C`}
               style={themed($temperatureCard)}
               headingStyle={themed($temperatureHeading)}
               contentTx="homeScreen:indoorTemp"
@@ -71,7 +77,9 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     <Text style={themed($footerText)}>💨 55% |</Text>
                   </View>
                   <View style={$footerItem}>
-                    <Text style={themed($footerText)}>🕒 Thu 24 Nov | 5:45 PM</Text>
+                    <Text style={themed($footerText)}>
+                      {dateTime.date} 🕒 {dateTime.time}
+                    </Text>
                   </View>
                 </View>
               }
@@ -100,14 +108,14 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                       paddingTop: 0,
                     }}
                   >
-                    24°C
+                    {tempSetpoint?.toFixed(1)}
                   </Text>
                 </View>
                 <View style={themed($controlsContainer)}>
-                  <TouchableOpacity style={themed($controlButton)}>
+                  <TouchableOpacity onPress={decrementTempSp} style={themed($controlButton)}>
                     <Text style={themed($buttonText)}>−</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={themed($controlButton)}>
+                  <TouchableOpacity onPress={incrementTempSp} style={themed($controlButton)}>
                     <Text style={themed($buttonText)}>+</Text>
                   </TouchableOpacity>
                 </View>
@@ -144,12 +152,18 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                 </View>
               </View>
             </Card>
-            <DeviceCard image="meter" deviceName="Fortis BC Suite Meter">
+            <DeviceCard imageSrc={meterImage} deviceName="Fortis BC Suite Meter">
               <View>
                 <Text style={themed($label)}>Rate: 4 BTU/hr</Text>
                 <Text style={themed($label)}>Accum. Consumption: 100 BTU</Text>
                 <Text style={themed($label)}>Monthly Cost: 102.34 CAD</Text>
                 <Text style={themed($label)}>DCW Meter Consumption: 102L</Text>
+              </View>
+            </DeviceCard>
+            <DeviceCard imageSrc={sensor2} deviceName="Water Detector">
+              <View>
+                <Text style={themed($label)}>Shutoff Valve Status: {} </Text>
+                <Text style={themed($label)}>Water Detector Staus:</Text>
               </View>
             </DeviceCard>
           </View>

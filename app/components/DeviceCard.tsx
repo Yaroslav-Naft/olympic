@@ -1,23 +1,22 @@
-import { View, ViewStyle, TextStyle, Image } from 'react-native';
+import { View, ViewStyle, TextStyle, Image, ImageSourcePropType } from 'react-native';
 import { Card } from './Card';
 import { Icon, Text } from '../components';
 import type { ThemedStyle } from '@/theme';
 import { useAppTheme } from '@/utils/useAppTheme';
-const meterImage = require('../../assets/images/meter.png');
 
 interface DeviceCardProps {
-  image: string;
+  imageSrc: string;
   deviceName: string;
   children?: React.ReactNode;
 }
 
-export const DeviceCard = ({ image, deviceName, children }: DeviceCardProps) => {
+export const DeviceCard = ({ imageSrc, deviceName, children }: DeviceCardProps) => {
   const { themed } = useAppTheme();
   return (
     <Card style={themed($temperatureCard)}>
       <View style={themed($contentContainer)}>
         <View style={themed($iconButtonContainer)}>
-          <Image source={meterImage} style={$logo} />
+          <Image source={imageSrc as ImageSourcePropType | undefined} style={$imageStyle} />
           <View style={themed($greetingContainer)}>
             <Text style={themed($content)}>{deviceName}</Text>
           </View>
@@ -71,7 +70,7 @@ const $contentContainer: ThemedStyle<ViewStyle> = () => ({
   // marginBottom: 16,
 });
 
-const $logo: ImageStyle = {
+const $imageStyle: ImageStyle = {
   height: 60,
   width: 60,
 };

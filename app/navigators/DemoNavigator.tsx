@@ -64,7 +64,7 @@ export function DemoNavigator() {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarLabel: translate('navigator:homeTab'),
+          // tabBarLabel: translate('navigator:homeTab'),
           tabBarIcon: ({ focused }) => (
             <Icon icon="home" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),
@@ -74,7 +74,7 @@ export function DemoNavigator() {
         name="Calendar"
         component={BlankScreen}
         options={{
-          tabBarLabel: translate('navigator:calendarTab'),
+          // tabBarLabel: translate('navigator:calendarTab'),
           tabBarIcon: ({ focused }) => (
             <Icon icon="calendar" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),
@@ -84,7 +84,7 @@ export function DemoNavigator() {
         name="Comfort"
         component={BlankScreen}
         options={{
-          tabBarLabel: translate('navigator:comfortTab'),
+          // tabBarLabel: translate('navigator:comfortTab'),
           tabBarIcon: ({ focused }) => (
             <Icon icon="list" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),
@@ -94,7 +94,7 @@ export function DemoNavigator() {
         name="Settings"
         component={BlankScreen}
         options={{
-          tabBarLabel: translate('navigator:settingsTab'),
+          // tabBarLabel: translate('navigator:settingsTab'),r
           tabBarIcon: ({ focused }) => (
             <Icon icon="setting" color={focused ? 'white' : colors.tintInactive} size={30} />
           ),
