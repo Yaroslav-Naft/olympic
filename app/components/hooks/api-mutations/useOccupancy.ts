@@ -10,10 +10,8 @@ export const useOccupancy = () => {
     setSpLoading(true);
     try {
       const result = await api.getOccupancy();
-      console.log(`occupancy we got ${result.data}`);
 
       if (result.kind === 'ok') {
-        console.log(`setting occupancy result.data`);
         setOccupancy(result.data);
       } else {
         setError('Failed to load Temperature data');
@@ -27,14 +25,11 @@ export const useOccupancy = () => {
     }
   }, []);
 
-  async function changeOccupancy(value: string) {
-    console.log(`got in with ${value}`);
+  async function changeOccupancy(value: string): Promise<void> {
     try {
       const result = await api.postOccupancy(value);
-      console.log(`after result changed to ${value}`);
       if (result.kind === 'ok') {
         setOccupancy(value);
-        console.log(`success occupancy changed to ${value}`);
       }
     } catch (err) {
       setOccupancy('');

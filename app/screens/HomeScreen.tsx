@@ -29,13 +29,25 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
     const { tempSetpoint, incrementTempSp, decrementTempSp, spLoading, fetchTempSp } =
       useTempSetpoint();
     const { dateTime, fetchDateTime, dateTimeLoading } = useDateTime();
-    const { occupancy, changeOccupancy } = useOccupancy();
-    const { btuData } = useBTUMeter();
-    const { waterData } = useWaterMeter();
+    const { occupancy, changeOccupancy, fetchOccupancy } = useOccupancy();
+    const { btuData, fetchSupplyTemp, fetchMonthlyCost, fetchRate, fetchAccumulatedConsumption } =
+      useBTUMeter();
+    const { waterData, fetchShutoffValveStatus, fetchDetectorStatus } = useWaterMeter();
 
     const refreshAllData = useCallback(async () => {
       try {
-        await Promise.all([fetchTemp(), fetchTempSp(), fetchDateTime()]);
+        await Promise.all([
+          fetchTemp(),
+          fetchOccupancy(),
+          fetchTempSp(),
+          fetchDateTime(),
+          fetchShutoffValveStatus,
+          fetchDetectorStatus,
+          fetchSupplyTemp,
+          fetchMonthlyCost,
+          fetchRate,
+          fetchAccumulatedConsumption,
+        ]);
       } catch (err) {
         console.error(`error fetching data ${err}`);
       }
@@ -129,34 +141,62 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
               <View style={themed($bottomContainer)}>
                 <View>
                   <TouchableOpacity
-                    style={themed(occupancy === '7' ? $iconButtonSelected : $iconButtonSelected)}
+                    style={themed(occupancy === '7' ? $iconButtonSelected : $iconButton)}
                     onPress={() => changeOccupancy('7')}
                   >
-                    <Icon icon="power" color="#374151" size={15} />
+                    <View style={{ flexDirection: 'row' }}>
+                      <View style={{ paddingTop: 3, paddingRight: 2 }}>
+                        <Icon icon="power" color="#374151" size={15} />
+                      </View>
+                      <View>
+                        <Text size="xs"> On</Text>
+                      </View>
+                    </View>
                   </TouchableOpacity>
                 </View>
                 <View>
                   <TouchableOpacity
-                    style={themed($iconButton)}
+                    style={themed(occupancy === '1' ? $iconButtonSelected : $iconButton)}
                     onPress={() => changeOccupancy('1')}
                   >
-                    <Icon icon="a" color="#374151" size={15} />
+                    <View style={{ flexDirection: 'row' }}>
+                      <View style={{ paddingTop: 3, paddingRight: 2 }}>
+                        <Icon icon="a" color="#374151" size={15} />
+                      </View>
+                      <View>
+                        <Text size="xs"> Auto</Text>
+                      </View>
+                    </View>
                   </TouchableOpacity>
                 </View>
                 <View>
                   <TouchableOpacity
-                    style={themed($iconButton)}
+                    style={themed(occupancy === '2' ? $iconButtonSelected : $iconButton)}
                     onPress={() => changeOccupancy('2')}
                   >
-                    <Icon icon="sun" color="#374151" size={15} />
+                    <View style={{ flexDirection: 'row' }}>
+                      <View style={{ paddingTop: 3, paddingRight: 2 }}>
+                        <Icon icon="sun" color="#374151" size={15} />
+                      </View>
+                      <View>
+                        <Text size="xs"> Heat</Text>
+                      </View>
+                    </View>
                   </TouchableOpacity>
                 </View>
                 <View>
                   <TouchableOpacity
-                    style={themed(true ? $iconButton : $iconButtonSelected)}
+                    style={themed(occupancy === '4' ? $iconButtonSelected : $iconButton)}
                     onPress={() => changeOccupancy('4')}
                   >
-                    <Icon icon="snow" size={15} color="#374151" />
+                    <View style={{ flexDirection: 'row' }}>
+                      <View style={{ paddingTop: 3, paddingRight: 2 }}>
+                        <Icon icon="snow" color="#374151" size={15} />
+                      </View>
+                      <View>
+                        <Text size="xs"> Cool</Text>
+                      </View>
+                    </View>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -288,13 +328,11 @@ const $spinner: ViewStyle = {
 };
 
 const $iconButton: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  width: 36,
+  width: 80,
   height: 36,
   borderRadius: 10,
-  paddingLeft: 30,
-  paddingRight: 30,
-  paddingTop: 10,
   borderWidth: 1,
+  marginRight: 2,
   borderColor: colors.palette.neutral200,
   backgroundColor: colors.palette.neutral100,
   justifyContent: 'center',
@@ -302,13 +340,11 @@ const $iconButton: ThemedStyle<ViewStyle> = ({ colors }) => ({
 });
 
 const $iconButtonSelected: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  width: 36,
+  width: 80,
   height: 36,
   borderRadius: 10,
-  paddingLeft: 30,
-  paddingRight: 30,
-  paddingTop: 10,
   borderWidth: 1,
+  marginRight: 2,
   borderColor: '#2563EB',
   backgroundColor: '#EBF4FF',
   justifyContent: 'center',

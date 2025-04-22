@@ -75,7 +75,6 @@ export class Api {
   async getDateTime(): Promise<GetTResult<DateTimeResponse>> {
     try {
       const response: ApiResponse<DateTimeResponse> = await this.apisauce.get('/dateTime');
-      console.log(`NOW got datetime ${response.data?.date}`);
 
       if (!response.data || !response.ok) {
         return { kind: 'error', error: 'Failed to fetch Temp data' };
