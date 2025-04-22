@@ -71,10 +71,10 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
               FooterComponent={
                 <View style={$footerContainer}>
                   <View style={$footerItem}>
-                    <Text style={themed($footerText)}>🌥 32°C |</Text>
+                    <Text style={themed($footerText)}>🌥 21°C | </Text>
                   </View>
                   <View style={$footerItem}>
-                    <Text style={themed($footerText)}>💨 55% |</Text>
+                    <Text style={themed($footerText)}>💨 74% RH | </Text>
                   </View>
                   <View style={$footerItem}>
                     <Text style={themed($footerText)}>
@@ -127,17 +127,15 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                 </View>
               </View>
               <View style={themed($bottomContainer)}>
-                <View style={themed($iconButtonContainer)}>
+                <View>
                   <TouchableOpacity
-                    style={themed(occupancy === '7' ? $iconButtonSelected : $iconButton)}
+                    style={themed(occupancy === '7' ? $iconButtonSelected : $iconButtonSelected)}
                     onPress={() => changeOccupancy('7')}
                   >
                     <Icon icon="power" color="#374151" size={15} />
                   </TouchableOpacity>
                 </View>
-                <View
-                  style={themed(occupancy === '1' ? $iconButtonSelected : $iconButtonContainer)}
-                >
+                <View>
                   <TouchableOpacity
                     style={themed($iconButton)}
                     onPress={() => changeOccupancy('1')}
@@ -145,9 +143,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     <Icon icon="a" color="#374151" size={15} />
                   </TouchableOpacity>
                 </View>
-                <View
-                  style={themed(occupancy === '2' ? $iconButtonSelected : $iconButtonContainer)}
-                >
+                <View>
                   <TouchableOpacity
                     style={themed($iconButton)}
                     onPress={() => changeOccupancy('2')}
@@ -155,11 +151,9 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     <Icon icon="sun" color="#374151" size={15} />
                   </TouchableOpacity>
                 </View>
-                <View
-                  style={themed(occupancy === '4' ? $iconButtonSelected : $iconButtonContainer)}
-                >
+                <View>
                   <TouchableOpacity
-                    style={themed($iconButton)}
+                    style={themed(true ? $iconButton : $iconButtonSelected)}
                     onPress={() => changeOccupancy('4')}
                   >
                     <Icon icon="snow" size={15} color="#374151" />
@@ -219,24 +213,6 @@ const $temperatureCard: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   elevation: 2,
 });
 
-const $sliderStyle: ThemedStyle<ViewStyle> = () => ({
-  width: '100%',
-  height: 40,
-});
-
-const $powerButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  position: 'absolute',
-  right: spacing.sm,
-  top: spacing.sm,
-  backgroundColor: 'white',
-  padding: spacing.xs,
-  borderRadius: 20,
-  width: 40,
-  height: 40,
-  justifyContent: 'center',
-  alignItems: 'center',
-});
-
 const $temperatureHeading: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
   fontSize: 20,
   fontWeight: '600',
@@ -252,7 +228,6 @@ const $temperatureContent: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
 
 const $footerContainer: ViewStyle = {
   flexDirection: 'row',
-  justifyContent: 'space-between',
   alignItems: 'center',
 };
 
@@ -275,15 +250,11 @@ const $controlsContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   gap: 12,
 });
 
-const $iconButtonContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  // padding: 30,
-});
-
 const $controlButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   width: 45,
   height: 45,
   borderRadius: 8,
-  borderWidth: 1, // Add border
+  borderWidth: 1,
   borderColor: colors.palette.neutral200,
   shadowColor: colors.palette.neutral800,
   verticalAlign: 'center',
@@ -316,12 +287,6 @@ const $spinner: ViewStyle = {
   marginVertical: 20,
 };
 
-const $error: TextStyle = {
-  color: 'red',
-  textAlign: 'center',
-  marginVertical: 20,
-};
-
 const $iconButton: ThemedStyle<ViewStyle> = ({ colors }) => ({
   width: 36,
   height: 36,
@@ -329,7 +294,7 @@ const $iconButton: ThemedStyle<ViewStyle> = ({ colors }) => ({
   paddingLeft: 30,
   paddingRight: 30,
   paddingTop: 10,
-  borderWidth: 1, // Add border
+  borderWidth: 1,
   borderColor: colors.palette.neutral200,
   backgroundColor: colors.palette.neutral100,
   justifyContent: 'center',
@@ -340,45 +305,14 @@ const $iconButtonSelected: ThemedStyle<ViewStyle> = ({ colors }) => ({
   width: 36,
   height: 36,
   borderRadius: 10,
-  borderWidth: 1, // Keep border same or remove if desired
-  borderColor: colors.palette.primary500, // Keep border color or match background
-  backgroundColor: colors.palette.primary500, // Solid primary background
+  paddingLeft: 30,
+  paddingRight: 30,
+  paddingTop: 10,
+  borderWidth: 1,
+  borderColor: '#2563EB',
+  backgroundColor: '#EBF4FF',
   justifyContent: 'center',
   alignItems: 'center',
-});
-
-const $iconText: ThemedStyle<TextStyle> = ({ colors }) => ({
-  fontSize: 16,
-  fontWeight: '500',
-  color: colors.text,
-});
-
-const $coolButton: ThemedStyle<ViewStyle> = () => ({
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '#f3f4f6',
-  paddingHorizontal: 16,
-  paddingVertical: 8,
-  borderRadius: 24,
-  gap: 6,
-  borderWidth: 1,
-  borderColor: '#e5e7eb',
-});
-
-const $testContainer: ThemedStyle<ViewStyle> = () => ({
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-});
-
-const $coolIcon: ThemedStyle<TextStyle> = {
-  color: '#007AFF',
-};
-
-const $coolText: ThemedStyle<TextStyle> = ({ colors }) => ({
-  fontSize: 14,
-  fontWeight: '500',
-  color: colors.text,
 });
 
 const $contentContainer: ThemedStyle<ViewStyle> = () => ({
@@ -388,22 +322,10 @@ const $contentContainer: ThemedStyle<ViewStyle> = () => ({
   marginBottom: 16,
 });
 
-const $blueSlider: ThemedStyle<ViewStyle> = () => ({
-  flex: 1,
-  backgroundColor: '#007AFF',
-});
-
-const $graySlider: ThemedStyle<ViewStyle> = () => ({
-  flex: 1,
-  backgroundColor: '#F5F5F5',
-});
-
 const $bottomContainer: ThemedStyle<ViewStyle> = () => ({
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
-  // marginLeft: 16,
-  // marginRight: 16,
 });
 
 const $label: ThemedStyle<TextStyle> = ({ colors }) => ({
@@ -411,29 +333,3 @@ const $label: ThemedStyle<TextStyle> = ({ colors }) => ({
   color: '#6b7280',
   marginBottom: 8,
 });
-
-const $temperature: ThemedStyle<TextStyle> = ({ colors }) => ({
-  fontSize: 40,
-  fontFamily: 'System',
-  letterSpacing: 0.5,
-  includeFontPadding: false,
-  // textAlign: 'left',
-  fontWeight: '600',
-  color: '#374151',
-});
-
-const $sliderContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  width: '100%',
-  padding: spacing.md,
-  borderRadius: spacing.md,
-  marginTop: spacing.sm,
-  minHeight: 200, // Add explicit height to make it visible
-  borderWidth: 1, // Add border to see the container boundaries
-  borderColor: colors.palette.neutral300,
-  alignItems: 'center', // Center children horizontally
-  justifyContent: 'center', // Center children vertically
-});
-
-//Later
-//Remove unecessary code
-//Break down into own components

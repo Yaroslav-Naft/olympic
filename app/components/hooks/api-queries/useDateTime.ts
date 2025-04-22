@@ -1,4 +1,5 @@
 import { api } from '@/services/api/api';
+import { parse } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 
 interface DateTime {
@@ -21,7 +22,7 @@ export const useDateTime = () => {
     try {
       const result = await api.getDateTime();
       if (result.kind === 'ok') {
-        const date = new Date(result.data.date);
+        const date = parse(result.data.date, 'MM-dd-yyyy', new Date());
         const formattedDate = date
           .toLocaleDateString('en-US', {
             weekday: 'short',
@@ -29,7 +30,6 @@ export const useDateTime = () => {
             day: 'numeric',
           })
           .replace(',', '');
-
         setDateTime({ ...result.data, date: formattedDate });
       } else {
         setError('Failed to load Date Time data');

@@ -120,6 +120,7 @@ export const iconRegistry = {
   sun: require('../../assets/icons/sun-regular.png'),
   user: require('../../assets/icons/circle-user-solid.png'),
   olympic: require('../../assets/icons/olympic.png'),
+  fortis: require('../../assets/icons/fortis.png'),
 };
 
 const $imageStyleBase: ImageStyle = {
