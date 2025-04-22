@@ -183,9 +183,17 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
             </DeviceCard>
             <DeviceCard imageSrc={sensor2} deviceName="Water Detector">
               <View>
-                <Text style={themed($label)}>Shutoff Valve Status: {waterData?.valveStatus}</Text>
                 <Text style={themed($label)}>
-                  Water Detector Status: {waterData?.detectorStatus}
+                  Shutoff Valve Status:{' '}
+                  <Text style={{ color: waterData?.valveStatus === 'active' ? 'green' : 'red' }}>
+                    {waterData?.valveStatus}
+                  </Text>
+                </Text>
+                <Text style={themed($label)}>
+                  Water Detector Status:{' '}
+                  <Text style={{ color: waterData?.detectorStatus === 'active' ? 'green' : 'red' }}>
+                    {waterData?.detectorStatus}
+                  </Text>
                 </Text>
               </View>
             </DeviceCard>
