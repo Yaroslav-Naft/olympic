@@ -34,7 +34,7 @@ export const useTempSetpoint = () => {
     const newSetpoint = tempSetpoint && tempSetpoint + increment;
 
     try {
-      const result = await api.postTempSetpoint(newSetpoint!.toFixed(1));
+      const result = await api.postTempSetpoint(newSetpoint ? newSetpoint?.toFixed(1) : '0');
       if (result.kind === 'ok') {
         setTempSetpoint((x) => (x !== null && x !== undefined ? x + increment : null));
       }
