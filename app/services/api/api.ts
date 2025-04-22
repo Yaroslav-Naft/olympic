@@ -29,6 +29,8 @@ type GetTResult<T> =
   | { kind: 'bad-data' }
   | { kind: 'error'; error: string };
 
+type PostTResult = { kind: 'ok' } | { kind: 'bad-data' } | { kind: 'error'; error: string };
+
 interface DateTimeResponse {
   timeZone: string;
   time: string;
@@ -52,6 +54,8 @@ export class Api {
       },
     });
   }
+
+  //GET
 
   async getTemp(): Promise<GetTResult<number>> {
     try {
@@ -97,30 +101,135 @@ export class Api {
     }
   }
 
-  async getWaterData(): Promise<GetTempSetpointResult> {
+  async getOccupancy(): Promise<GetTResult<number>> {
     try {
-      const response: ApiResponse<string> = await this.apisauce.get('/');
+      const response: ApiResponse<string> = await this.apisauce.get('/occupancy');
 
       if (!response.data || !response.ok) {
-        return { kind: 'error', error: 'Failed to fetch Temp data' };
+        return { kind: 'error', error: 'Failed to fetch Occupancy' };
       }
-      const temperatureValue = parseFloat(response.data);
-      return { kind: 'ok', data: temperatureValue };
+      const occupancyValue = parseFloat(response.data);
+      return { kind: 'ok', data: occupancyValue };
     } catch (error: unknown) {
       console.log('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
 
-  async getBTUData(): Promise<GetTempSetpointResult> {
+  async getWaterShutoffValve(): Promise<GetTResult<string>> {
     try {
-      const response: ApiResponse<string> = await this.apisauce.get('/tempSetpoint');
+      const response: ApiResponse<string> = await this.apisauce.get('/WaterShutoffValve');
 
       if (!response.data || !response.ok) {
         return { kind: 'error', error: 'Failed to fetch Temp data' };
       }
-      const temperatureValue = parseFloat(response.data);
-      return { kind: 'ok', data: temperatureValue };
+
+      return { kind: 'ok', data: response.data };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+
+  async getWaterDetectorStatus(): Promise<GetTResult<string>> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.get('/WaterDetectorStatus');
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to fetch Water Detector Status data' };
+      }
+      return { kind: 'ok', data: response.data };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+
+  async getBTUAccumulatedConsumption(): Promise<GetTResult<number>> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.get('/btuAccumulatedConsumption');
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to fetch Temp data' };
+      }
+      const value = parseFloat(response.data);
+      return { kind: 'ok', data: value };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+  async getBTUMonthlyCost(): Promise<GetTResult<number>> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.get('/btuMonthlyCost');
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to fetch Temp data' };
+      }
+      const value = parseFloat(response.data);
+      return { kind: 'ok', data: value };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+  async getBTURate(): Promise<GetTResult<number>> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.get('/btuRate');
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to fetch Temp data' };
+      }
+      const value = parseFloat(response.data);
+      return { kind: 'ok', data: value };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+  async getBTUMeterSupplyTemp(): Promise<GetTResult<number>> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.get('/btuMeterSupplyTemp');
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to fetch Temp data' };
+      }
+      const value = parseFloat(response.data);
+      return { kind: 'ok', data: value };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+
+  //POST
+  async postTempSetpoint(value: string): Promise<PostTResult> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.post('/postTempSetpoint', {
+        value,
+      });
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to post Temp Setpoint data' };
+      }
+      return { kind: 'ok' };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+
+  async postOccupancy(value: string): Promise<PostTResult> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.post('/postOccupancy', {
+        value,
+      });
+      console.log(`response after call${response.ok}`);
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to post Occupancy data' };
+      }
+      return { kind: 'ok' };
     } catch (error: unknown) {
       console.log('FETCH: Error during request', error);
       return { kind: 'bad-data' };

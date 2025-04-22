@@ -7,9 +7,12 @@ import type { ThemedStyle } from '@/theme';
 import { useAppTheme } from '@/utils/useAppTheme';
 import { ProfileCard } from '@/components/ProfileCard';
 import { DeviceCard } from '@/components/DeviceCard';
-import { useTemperature } from '@/components/hooks/api-queries/useTemperature';
-import { useTempSetpoint } from '@/components/hooks/api-queries/useTempSetpoint';
 import { useDateTime } from '@/components/hooks/api-queries/useDateTime';
+import { useTemperature } from '@/components/hooks/api-queries/useTemperature';
+import { useTempSetpoint } from '@/components/hooks/api-mutations/useTempSetpoint';
+import { useBTUMeter } from '@/components/hooks/api-queries/useBTUMeter';
+import { useWaterMeter } from '@/components/hooks/api-queries/useWaterMeter';
+import { useOccupancy } from '@/components/hooks/api-mutations/useOccupancy';
 
 const meterImage = require('../../assets/images/meter.png');
 const sensor2 = require('../../assets/images/sensor2.jpg');
@@ -23,15 +26,12 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
   function HomeScreen(_props) {
     const { themed } = useAppTheme();
     const { temp, setTemp, fetchTemp, tempLoading } = useTemperature();
-    const {
-      tempSetpoint,
-      setTempSetpoint,
-      incrementTempSp,
-      decrementTempSp,
-      spLoading,
-      fetchTempSp,
-    } = useTempSetpoint();
-    const { dateTime, setDateTime, fetchDateTime, dateTimeLoading } = useDateTime();
+    const { tempSetpoint, incrementTempSp, decrementTempSp, spLoading, fetchTempSp } =
+      useTempSetpoint();
+    const { dateTime, fetchDateTime, dateTimeLoading } = useDateTime();
+    const { occupancy, changeOccupancy } = useOccupancy();
+    const { btuData } = useBTUMeter();
+    const { waterData } = useWaterMeter();
 
     const refreshAllData = useCallback(async () => {
       try {
@@ -45,7 +45,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
 
     useEffect(() => {
       refreshAllData();
-      const interval = setInterval(refreshAllData, 10000);
+      const interval = setInterval(refreshAllData, 6000000);
       return () => clearInterval(interval);
     }, [refreshAllData]);
 
@@ -56,18 +56,18 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
           <ActivityIndicator size="large" style={$spinner} />
         ) : (
           <View>
-            <ProfileCard iconType="user" size={50} txContent="Hello 👋" profileName="Fortis BC" />
+            <ProfileCard
+              iconType="user"
+              size={50}
+              txContent="Hello 👋"
+              profileName="Fortis BC @ 1111 West Georgia St"
+            />
             <Card
               heading={`${temp?.toFixed(2) ?? '--'}°C`}
               style={themed($temperatureCard)}
               headingStyle={themed($temperatureHeading)}
               contentTx="homeScreen:indoorTemp"
               contentStyle={themed($temperatureContent)}
-              RightComponent={
-                <View style={themed($powerButton)}>
-                  <TempSwitch />
-                </View>
-              }
               FooterComponent={
                 <View style={$footerContainer}>
                   <View style={$footerItem}>
@@ -112,41 +112,56 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                   </Text>
                 </View>
                 <View style={themed($controlsContainer)}>
-                  <TouchableOpacity onPress={decrementTempSp} style={themed($controlButton)}>
+                  <TouchableOpacity
+                    onPress={() => decrementTempSp(0.5)}
+                    style={themed($controlButton)}
+                  >
                     <Text style={themed($buttonText)}>−</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={incrementTempSp} style={themed($controlButton)}>
+                  <TouchableOpacity
+                    onPress={() => incrementTempSp(0.5)}
+                    style={themed($controlButton)}
+                  >
                     <Text style={themed($buttonText)}>+</Text>
                   </TouchableOpacity>
                 </View>
               </View>
-              {/* Add slider here later */}
-              {/* <Slider
-                style={{ width: 200, height: 40 }}
-                minimumValue={0}
-                maximumValue={1}
-                minimumTrackTintColor="#FFFFFF"
-                maximumTrackTintColor="#000000"
-              /> */}
-
               <View style={themed($bottomContainer)}>
                 <View style={themed($iconButtonContainer)}>
-                  <TouchableOpacity style={themed($iconButton)}>
+                  <TouchableOpacity
+                    style={themed(occupancy === '7' ? $iconButtonSelected : $iconButton)}
+                    onPress={() => changeOccupancy('7')}
+                  >
                     <Icon icon="power" color="#374151" size={15} />
                   </TouchableOpacity>
                 </View>
-                <View style={themed($iconButtonContainer)}>
-                  <TouchableOpacity style={themed($iconButton)}>
+                <View
+                  style={themed(occupancy === '1' ? $iconButtonSelected : $iconButtonContainer)}
+                >
+                  <TouchableOpacity
+                    style={themed($iconButton)}
+                    onPress={() => changeOccupancy('1')}
+                  >
                     <Icon icon="a" color="#374151" size={15} />
                   </TouchableOpacity>
                 </View>
-                <View style={themed($iconButtonContainer)}>
-                  <TouchableOpacity style={themed($iconButton)}>
+                <View
+                  style={themed(occupancy === '2' ? $iconButtonSelected : $iconButtonContainer)}
+                >
+                  <TouchableOpacity
+                    style={themed($iconButton)}
+                    onPress={() => changeOccupancy('2')}
+                  >
                     <Icon icon="sun" color="#374151" size={15} />
                   </TouchableOpacity>
                 </View>
-                <View style={themed($iconButtonContainer)}>
-                  <TouchableOpacity style={themed($iconButton)}>
+                <View
+                  style={themed(occupancy === '4' ? $iconButtonSelected : $iconButtonContainer)}
+                >
+                  <TouchableOpacity
+                    style={themed($iconButton)}
+                    onPress={() => changeOccupancy('4')}
+                  >
                     <Icon icon="snow" size={15} color="#374151" />
                   </TouchableOpacity>
                 </View>
@@ -154,16 +169,24 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
             </Card>
             <DeviceCard imageSrc={meterImage} deviceName="Fortis BC Suite Meter">
               <View>
-                <Text style={themed($label)}>Rate: 4 BTU/hr</Text>
-                <Text style={themed($label)}>Accum. Consumption: 100 BTU</Text>
-                <Text style={themed($label)}>Monthly Cost: 102.34 CAD</Text>
-                <Text style={themed($label)}>DCW Meter Consumption: 102L</Text>
+                <Text style={themed($label)}>Rate: {btuData.rate?.toString() ?? '0.0'}BTU/hr</Text>
+                <Text style={themed($label)}>
+                  Accum. Consumption: {btuData.accumulatedConsumption?.toFixed(2) ?? '--'} BTU
+                </Text>
+                <Text style={themed($label)}>
+                  Monthly Cost: {btuData.monthlyCost?.toFixed(2) ?? '0.0'} CAD
+                </Text>
+                <Text style={themed($label)}>
+                  DCW Meter Consumption: {btuData.accumulatedConsumption?.toFixed(1) ?? '--'}L
+                </Text>
               </View>
             </DeviceCard>
             <DeviceCard imageSrc={sensor2} deviceName="Water Detector">
               <View>
-                <Text style={themed($label)}>Shutoff Valve Status: {} </Text>
-                <Text style={themed($label)}>Water Detector Staus:</Text>
+                <Text style={themed($label)}>Shutoff Valve Status: {waterData?.valveStatus}</Text>
+                <Text style={themed($label)}>
+                  Water Detector Status: {waterData?.detectorStatus}
+                </Text>
               </View>
             </DeviceCard>
           </View>
@@ -301,6 +324,17 @@ const $iconButton: ThemedStyle<ViewStyle> = ({ colors }) => ({
   borderWidth: 1, // Add border
   borderColor: colors.palette.neutral200,
   backgroundColor: colors.palette.neutral100,
+  justifyContent: 'center',
+  alignItems: 'center',
+});
+
+const $iconButtonSelected: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  width: 36,
+  height: 36,
+  borderRadius: 10,
+  borderWidth: 1, // Keep border same or remove if desired
+  borderColor: colors.palette.primary500, // Keep border color or match background
+  backgroundColor: colors.palette.primary500, // Solid primary background
   justifyContent: 'center',
   alignItems: 'center',
 });
