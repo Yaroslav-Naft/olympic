@@ -3,6 +3,7 @@ import Config from '../../config';
 import { GeneralApiProblem, getGeneralApiProblem } from './apiProblem';
 import type { ApiConfig, TemperatureResponse } from './api.types';
 import type { EpisodeSnapshotIn } from '../../models/Episode';
+import { DefaultDeviceState } from '@/components/hooks/api-queries/useWaterMeter';
 
 /**
  * Configuring the apisauce instance.
@@ -150,9 +151,10 @@ export class Api {
     }
   }
 
-  async getWaterShutoffValve(): Promise<GetTResult<string>> {
+  async getWaterShutoffValve(): Promise<GetTResult<DefaultDeviceState | null>> {
     try {
-      const response: ApiResponse<string> = await this.apisauce.get('/WaterShutoffValve');
+      const response: ApiResponse<DefaultDeviceState | null> =
+        await this.apisauce.get('/WaterShutoffValve');
 
       if (!response.data || !response.ok) {
         return { kind: 'error', error: 'Failed to fetch Temp data' };

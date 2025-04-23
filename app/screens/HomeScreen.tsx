@@ -24,6 +24,16 @@ export function TempSwitch(props: SwitchToggleProps) {
   return <Switch value={val} onPress={() => setVal(!val)} />;
 }
 
+enum Colors {
+  GREEN = 'green',
+  RED = 'red',
+}
+
+enum LeakDetectionStatus {
+  LEAK = 'Leak Detected',
+  NO_LEAK = 'No Leak',
+}
+
 export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' | 'Settings'>> =
   function HomeScreen(_props) {
     const { themed } = useAppTheme();
@@ -211,9 +221,16 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
               <View style={$valveDetectorContainer}>
                 <View style={$valveContainer}>
                   <Text style={themed($label)}>
-                    Shutoff Valve Status:{' '}
-                    <Text style={{ color: waterData?.valveStatus === 'active' ? 'red' : 'green' }}>
-                      {waterData?.valveStatus === 'active' ? 'Closed' : 'Open'}
+                    Shutoff Valve Status: {/* using 'active' instead of Active for some reason */}
+                    <Text
+                      style={{
+                        color:
+                          waterData?.valveStatus === DefaultDeviceState.Active
+                            ? Colors.RED
+                            : Colors.GREEN,
+                      }}
+                    >
+                      {waterData?.valveStatus === DefaultDeviceState.Active ? 'Closed' : 'Open'}
                     </Text>
                   </Text>
                 </View>
@@ -221,11 +238,16 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                   <Text style={themed($label)}>
                     Water Detector Status:{' '}
                     <Text
-                      style={{ color: waterData?.detectorStatus === 'Active' ? 'red' : 'green' }}
+                      style={{
+                        color:
+                          waterData?.detectorStatus === DefaultDeviceState.Active
+                            ? Colors.RED
+                            : Colors.GREEN,
+                      }}
                     >
                       {waterData?.detectorStatus === DefaultDeviceState.Active
-                        ? 'Leak Detected'
-                        : 'No Leak'}
+                        ? LeakDetectionStatus.LEAK
+                        : LeakDetectionStatus.NO_LEAK}
                     </Text>
                   </Text>
                 </View>
@@ -349,7 +371,7 @@ const $buttonText: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
   fontSize: 22,
   color: colors.palette.neutral800,
   textAlign: 'center',
-  fontWeight: '200', // Increased weight for more prominence
+  fontWeight: '200',
   includeFontPadding: false,
   lineHeight: 22,
   fontFamily: 'System',
