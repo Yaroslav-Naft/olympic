@@ -31,6 +31,20 @@ export const useWaterMeter = (refreshInterval = 10000) => {
     }
   }, []);
 
+  const fetchLeakStatus = useCallback(async () => {
+    try {
+      const result = await api.getLeakStatus();
+      if (result.kind === 'ok') {
+        setWaterData((prev) => ({ ...prev, leakStatus: result.data }));
+        setErrors((prev) => ({ ...prev }));
+      } else if (result.kind === 'error') {
+        setErrors((prev) => ({ ...prev, leakStatus: '' }));
+      }
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, leakStatus: `Error: ${err}` }));
+    }
+  }, []);
+
   const fetchDetectorStatus = useCallback(async () => {
     try {
       const result = await api.getWaterDetectorStatus();
@@ -42,6 +56,20 @@ export const useWaterMeter = (refreshInterval = 10000) => {
       }
     } catch (err) {
       setErrors((prev) => ({ ...prev, detectorStatus: `Error: ${err}` }));
+    }
+  }, []);
+
+  const postWaterShutoffValve = useCallback(async (value: string): Promise<void> => {
+    try {
+      const result = await api.postWaterShutoffValve(value);
+      if (result.kind === 'ok') {
+        setWaterData((prev) => ({ ...prev, valveStatus: value }));
+        setErrors((prev) => ({ ...prev, valveStatus: '' }));
+      } else if (result.kind === 'error') {
+        setErrors((prev) => ({ ...prev, valveStatus: result.error }));
+      }
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, valveStatus: `Error ${err}` }));
     }
   }, []);
 
@@ -77,6 +105,8 @@ export const useWaterMeter = (refreshInterval = 10000) => {
     // Individual fetch functions (useful for granular refreshes)
     fetchShutoffValveStatus,
     fetchDetectorStatus,
+    fetchLeakStatus,
+    postWaterShutoffValve,
     isLoading,
     errors,
     refreshAllWaterData,

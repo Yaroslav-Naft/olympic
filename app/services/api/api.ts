@@ -93,6 +93,34 @@ export class Api {
     }
   }
 
+  async getWeatherTemp(): Promise<GetTResult<string>> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.get('/weatherTemp');
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to fetch Weather Temp' };
+      }
+      return { kind: 'ok', data: response.data };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+
+  async getWeatherStatus(): Promise<GetTResult<string>> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.get('/weatherStatus');
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to fetch Weather Temp' };
+      }
+      return { kind: 'ok', data: response.data };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+
   async getOccupancy(): Promise<GetTResult<number>> {
     try {
       const response: ApiResponse<string> = await this.apisauce.get('/occupancy');
@@ -114,6 +142,21 @@ export class Api {
 
       if (!response.data || !response.ok) {
         return { kind: 'error', error: 'Failed to fetch Temp data' };
+      }
+
+      return { kind: 'ok', data: response.data };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+
+  async getLeakStatus(): Promise<GetTResult<string>> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.get('/LeakStatus');
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to fetch leak status' };
       }
 
       return { kind: 'ok', data: response.data };
@@ -216,10 +259,25 @@ export class Api {
       const response: ApiResponse<string> = await this.apisauce.post('/postOccupancy', {
         value,
       });
-      console.log(`response after call${response.ok}`);
 
       if (!response.data || !response.ok) {
-        return { kind: 'error', error: 'Failed to post Occupancy data' };
+        return { kind: 'error', error: 'Failed to Post Occupancy data' };
+      }
+      return { kind: 'ok' };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+
+  async postWaterShutoffValve(value: string): Promise<PostTResult> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.post('/postWaterShutoffValve', {
+        value,
+      });
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to Post Water Shutoff Valve' };
       }
       return { kind: 'ok' };
     } catch (error: unknown) {

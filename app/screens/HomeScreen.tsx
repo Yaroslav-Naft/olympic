@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
-import { Card, Icon, Screen, Switch, SwitchToggleProps, Text } from '../components';
+import { Button, Card, Icon, Screen, Switch, SwitchToggleProps, Text } from '../components';
 import { DemoTabScreenProps } from '../navigators/DemoNavigator';
 import { $styles } from '../theme';
 import type { ThemedStyle } from '@/theme';
@@ -13,6 +13,7 @@ import { useTempSetpoint } from '@/components/hooks/api-mutations/useTempSetpoin
 import { useBTUMeter } from '@/components/hooks/api-queries/useBTUMeter';
 import { useWaterMeter } from '@/components/hooks/api-queries/useWaterMeter';
 import { useOccupancy } from '@/components/hooks/api-mutations/useOccupancy';
+import { useWeather } from '@/components/hooks/api-queries/useWeather';
 
 const meterImage = require('../../assets/images/meter.png');
 const sensor2 = require('../../assets/images/sensor2.jpg');
@@ -32,7 +33,14 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
     const { occupancy, changeOccupancy, fetchOccupancy } = useOccupancy();
     const { btuData, fetchSupplyTemp, fetchMonthlyCost, fetchRate, fetchAccumulatedConsumption } =
       useBTUMeter();
-    const { waterData, fetchShutoffValveStatus, fetchDetectorStatus } = useWaterMeter();
+    const {
+      waterData,
+      fetchShutoffValveStatus,
+      fetchDetectorStatus,
+      fetchLeakStatus,
+      postWaterShutoffValve,
+    } = useWaterMeter();
+    const { weather, fetchWeatherTemp, fetchWeatherStatus } = useWeather();
 
     const refreshAllData = useCallback(async () => {
       try {
@@ -41,12 +49,15 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
           fetchOccupancy(),
           fetchTempSp(),
           fetchDateTime(),
-          fetchShutoffValveStatus,
-          fetchDetectorStatus,
-          fetchSupplyTemp,
-          fetchMonthlyCost,
-          fetchRate,
-          fetchAccumulatedConsumption,
+          fetchShutoffValveStatus(),
+          fetchDetectorStatus(),
+          fetchSupplyTemp(),
+          fetchMonthlyCost(),
+          fetchRate(),
+          fetchAccumulatedConsumption(),
+          fetchWeatherTemp(),
+          fetchWeatherStatus(),
+          fetchLeakStatus(),
         ]);
       } catch (err) {
         console.error(`error fetching data ${err}`);
@@ -83,7 +94,9 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
               FooterComponent={
                 <View style={$footerContainer}>
                   <View style={$footerItem}>
-                    <Text style={themed($footerText)}>🌥 21°C | </Text>
+                    <Text style={themed($footerText)}>
+                      🌥 {weather?.outdoorAirTemp ?? '--'}°C |{' '}
+                    </Text>
                   </View>
                   <View style={$footerItem}>
                     <Text style={themed($footerText)}>💨 74% RH | </Text>
@@ -220,8 +233,14 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                 <Text style={themed($label)}>
                   Shutoff Valve Status:{' '}
                   <Text style={{ color: waterData?.valveStatus === 'active' ? 'green' : 'red' }}>
-                    {waterData?.valveStatus}
+                    {waterData?.valveStatus === 'active' ? 'Opened' : 'Closed'}
                   </Text>
+                  <TouchableOpacity
+                    onPress={() => postWaterShutoffValve('active')}
+                    style={themed($controlButton)}
+                  >
+                    <Text style={themed($buttonText)}>+</Text>
+                  </TouchableOpacity>
                 </Text>
                 <Text style={themed($label)}>
                   Water Detector Status:{' '}
