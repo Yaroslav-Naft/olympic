@@ -102,7 +102,9 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     </Text>
                   </View>
                   <View style={$footerItem}>
-                    <Text style={themed($footerText)}>💨 {humidity ?? '--'}% RH | </Text>
+                    <Text style={themed($footerText)}>
+                      💨 {humidity?.toFixed(1) ?? '--'}% RH |{' '}
+                    </Text>
                   </View>
                   <View style={$footerItem}>
                     <Text style={themed($footerText)}>
@@ -219,7 +221,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
             </Card>
             <DeviceCard imageSrc={meterImage} deviceName="Fortis BC Suite Meter">
               <View>
-                <Text style={themed($label)}>Rate: {btuData.rate?.toString() ?? '0.0'}BTU/hr</Text>
+                <Text style={themed($label)}>Rate: {btuData.rate?.toString() ?? '0.0'} BTU/hr</Text>
                 <Text style={themed($label)}>
                   Accum. Consumption: {btuData.accumulatedConsumption?.toFixed(2) ?? '--'} BTU
                 </Text>
@@ -227,7 +229,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                   Monthly Cost: {btuData.monthlyCost?.toFixed(2) ?? '0.0'} CAD
                 </Text>
                 <Text style={themed($label)}>
-                  DCW Meter Consumption: {btuData.accumulatedConsumption?.toFixed(1) ?? '--'}L
+                  DCW Meter Consumption: {btuData.accumulatedConsumption?.toFixed(1) ?? '--'} L
                 </Text>
               </View>
             </DeviceCard>
@@ -236,8 +238,8 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                 <View style={$valveContainer}>
                   <Text style={themed($label)}>
                     Shutoff Valve Status:{' '}
-                    <Text style={{ color: waterData?.valveStatus === 'active' ? 'green' : 'red' }}>
-                      {waterData?.valveStatus === 'active' ? 'Opened' : 'Closed'}
+                    <Text style={{ color: waterData?.valveStatus === 'active' ? 'red' : 'green' }}>
+                      {waterData?.valveStatus === 'active' ? 'Closed' : 'Open'}
                     </Text>
                   </Text>
                   {/* <TouchableOpacity
@@ -246,17 +248,14 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                   >
                     <Text style={themed($buttonText)}>Valve</Text>
                   </TouchableOpacity> */}
-                  <Text style={{ color: waterData?.leakStatus === 'active' ? 'red' : 'green' }}>
-                    {waterData?.leakStatus === 'active' ? 'Leak Detected' : 'No Leak'}
-                  </Text>
                 </View>
                 <View style={$detectorContainer}>
                   <Text style={themed($label)}>
                     Water Detector Status:{' '}
                     <Text
-                      style={{ color: waterData?.detectorStatus === 'active' ? 'green' : 'red' }}
+                      style={{ color: waterData?.detectorStatus === 'Active' ? 'red' : 'green' }}
                     >
-                      {waterData?.detectorStatus}
+                      {waterData?.detectorStatus === 'Active' ? 'Leak Detected' : 'No Leak'}
                     </Text>
                   </Text>
                 </View>

@@ -2,7 +2,7 @@ import { api } from '@/services/api/api';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const useHumidity = (refreshInterval = 10000) => {
-  const [humidity, setHumidity] = useState<string | null>();
+  const [humidity, setHumidity] = useState<number | null>();
   const [humidityLoading, setHumidityLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -11,7 +11,8 @@ export const useHumidity = (refreshInterval = 10000) => {
     try {
       const result = await api.getHumidity();
       if (result.kind === 'ok') {
-        setHumidity(result.data);
+        const convertedToNum = parseFloat(result.data);
+        setHumidity(convertedToNum);
       } else {
         setError('Failed to load Temperature data');
         setHumidity(null);
