@@ -64,6 +64,20 @@ export class Api {
     }
   }
 
+  async getHumidity(): Promise<GetTResult<string>> {
+    try {
+      const response: ApiResponse<string> = await this.apisauce.get('/humidity');
+
+      if (!response.data || !response.ok) {
+        return { kind: 'error', error: 'Failed to fetch Temp data' };
+      }
+      return { kind: 'ok', data: response.data };
+    } catch (error: unknown) {
+      console.log('FETCH: Error during request', error);
+      return { kind: 'bad-data' };
+    }
+  }
+
   async getDateTime(): Promise<GetTResult<DateTimeResponse>> {
     try {
       const response: ApiResponse<DateTimeResponse> = await this.apisauce.get('/dateTime');

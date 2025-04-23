@@ -14,6 +14,7 @@ import { useBTUMeter } from '@/components/hooks/api-queries/useBTUMeter';
 import { useWaterMeter } from '@/components/hooks/api-queries/useWaterMeter';
 import { useOccupancy } from '@/components/hooks/api-mutations/useOccupancy';
 import { useWeather } from '@/components/hooks/api-queries/useWeather';
+import { useHumidity } from '@/components/hooks/api-queries/useHumidity';
 
 const meterImage = require('../../assets/images/meter.png');
 const sensor2 = require('../../assets/images/sensor2.jpg');
@@ -26,7 +27,8 @@ export function TempSwitch(props: SwitchToggleProps) {
 export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' | 'Settings'>> =
   function HomeScreen(_props) {
     const { themed } = useAppTheme();
-    const { temp, setTemp, fetchTemp, tempLoading } = useTemperature();
+    const { temp, fetchTemp, tempLoading } = useTemperature();
+    const { humidity, fetchHumidity, humidityLoading } = useHumidity();
     const { tempSetpoint, incrementTempSp, decrementTempSp, spLoading, fetchTempSp } =
       useTempSetpoint();
     const { dateTime, fetchDateTime, dateTimeLoading } = useDateTime();
@@ -58,13 +60,14 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
           fetchWeatherTemp(),
           fetchWeatherStatus(),
           fetchLeakStatus(),
+          fetchHumidity(),
         ]);
       } catch (err) {
         console.error(`error fetching data ${err}`);
       }
     }, [fetchTemp, fetchTempSp, fetchDateTime]);
 
-    const isLoading = tempLoading || spLoading || dateTimeLoading;
+    const isLoading = tempLoading || spLoading || dateTimeLoading || humidityLoading;
 
     useEffect(() => {
       refreshAllData();
@@ -99,7 +102,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     </Text>
                   </View>
                   <View style={$footerItem}>
-                    <Text style={themed($footerText)}>💨 74% RH | </Text>
+                    <Text style={themed($footerText)}>💨 {humidity ?? '--'}% RH | </Text>
                   </View>
                   <View style={$footerItem}>
                     <Text style={themed($footerText)}>
@@ -229,25 +232,34 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
               </View>
             </DeviceCard>
             <DeviceCard imageSrc={sensor2} deviceName="Water Detector">
-              <View>
-                <Text style={themed($label)}>
-                  Shutoff Valve Status:{' '}
-                  <Text style={{ color: waterData?.valveStatus === 'active' ? 'green' : 'red' }}>
-                    {waterData?.valveStatus === 'active' ? 'Opened' : 'Closed'}
+              <View style={$valveDetectorContainer}>
+                <View style={$valveContainer}>
+                  <Text style={themed($label)}>
+                    Shutoff Valve Status:{' '}
+                    <Text style={{ color: waterData?.valveStatus === 'active' ? 'green' : 'red' }}>
+                      {waterData?.valveStatus === 'active' ? 'Opened' : 'Closed'}
+                    </Text>
                   </Text>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={() => postWaterShutoffValve('active')}
-                    style={themed($controlButton)}
+                    style={themed($iconButton)}
                   >
-                    <Text style={themed($buttonText)}>+</Text>
-                  </TouchableOpacity>
-                </Text>
-                <Text style={themed($label)}>
-                  Water Detector Status:{' '}
-                  <Text style={{ color: waterData?.detectorStatus === 'active' ? 'green' : 'red' }}>
-                    {waterData?.detectorStatus}
+                    <Text style={themed($buttonText)}>Valve</Text>
+                  </TouchableOpacity> */}
+                  <Text style={{ color: waterData?.leakStatus === 'active' ? 'red' : 'green' }}>
+                    {waterData?.leakStatus === 'active' ? 'Leak Detected' : 'No Leak'}
                   </Text>
-                </Text>
+                </View>
+                <View style={$detectorContainer}>
+                  <Text style={themed($label)}>
+                    Water Detector Status:{' '}
+                    <Text
+                      style={{ color: waterData?.detectorStatus === 'active' ? 'green' : 'red' }}
+                    >
+                      {waterData?.detectorStatus}
+                    </Text>
+                  </Text>
+                </View>
               </View>
             </DeviceCard>
           </View>
@@ -290,6 +302,20 @@ const $footerContainer: ViewStyle = {
   alignItems: 'center',
 };
 
+const $valveDetectorContainer: ViewStyle = {
+  // flexDirection: 'row',
+  // alignItems: 'center',
+};
+const $valveContainer: ViewStyle = {
+  flexDirection: 'col',
+  // alignItems: 'center',
+};
+const $detectorContainer: ViewStyle = {
+  flexDirection: 'row',
+  paddingTop: 5,
+  // alignItems: 'center',
+};
+
 const $footerItem: ViewStyle = {
   flexDirection: 'row',
   alignItems: 'center',
@@ -311,6 +337,24 @@ const $controlsContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
 
 const $controlButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   width: 45,
+  height: 45,
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: colors.palette.neutral200,
+  shadowColor: colors.palette.neutral800,
+  verticalAlign: 'center',
+  backgroundColor: 'white',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 0,
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 2,
+  elevation: 1,
+});
+
+const $valveControlButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+  width: 70,
   height: 45,
   borderRadius: 8,
   borderWidth: 1,

@@ -4,12 +4,14 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 interface WaterMeterData {
   valveStatus: string | null;
   detectorStatus: string | null;
+  leakStatus: string | null;
 }
 
 export const useWaterMeter = (refreshInterval = 10000) => {
   const [waterData, setWaterData] = useState<WaterMeterData>({
     valveStatus: null,
     detectorStatus: null,
+    leakStatus: null,
   });
 
   const [isLoading, setIsLoading] = useState(false);
