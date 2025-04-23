@@ -31,12 +31,24 @@ export const useTempSetpoint = () => {
   }, []);
 
   async function incrementTempSp(increment: number) {
-    const newSetpoint = tempSetpoint && tempSetpoint + increment;
+    let newValue: null | number = null;
+
+    //abstracted logic outside
+    setTempSetpoint((prev) => {
+      if (prev !== null && prev !== undefined) {
+        newValue = prev + increment;
+        return newValue;
+      }
+      //if undefined or null return previous value
+      return prev;
+    });
+
+    if (newValue === null) return;
 
     try {
-      const result = await api.postTempSetpoint(newSetpoint ? newSetpoint?.toFixed(1) : '0');
-      if (result.kind === 'ok') {
-        setTempSetpoint((x) => (x !== null && x !== undefined ? x + increment : null));
+      const result = await api.postTempSetpoint(newValue?.toFixed(1));
+      if (result.kind !== 'ok') {
+        throw new Error('Failed to update');
       }
     } catch (err) {
       setError(`Error: ${err}`);
@@ -46,12 +58,24 @@ export const useTempSetpoint = () => {
   }
 
   async function decrementTempSp(decrement: number) {
-    const newSetpoint = tempSetpoint && tempSetpoint + decrement;
+    let newValue: null | number = null;
+
+    //abstracted logic outside
+    setTempSetpoint((prev) => {
+      if (prev !== null && prev !== undefined) {
+        newValue = prev - decrement;
+        return newValue;
+      }
+      //if undefined or null return previous value
+      return prev;
+    });
+
+    if (newValue === null) return;
 
     try {
-      const result = await api.postTempSetpoint(newSetpoint!.toFixed(1));
-      if (result.kind === 'ok') {
-        setTempSetpoint((x) => (x !== null && x !== undefined ? x - decrement : null));
+      const result = await api.postTempSetpoint(newValue?.toFixed(1));
+      if (result.kind !== 'ok') {
+        throw new Error('Failed to update');
       }
     } catch (err) {
       setError(`Error: ${err}`);
