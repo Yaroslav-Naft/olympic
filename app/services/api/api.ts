@@ -59,7 +59,7 @@ export class Api {
       const temperatureValue = parseFloat(response.data);
       return { kind: 'ok', data: temperatureValue };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -73,7 +73,7 @@ export class Api {
       }
       return { kind: 'ok', data: response.data };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -87,7 +87,7 @@ export class Api {
       }
       return { kind: 'ok', data: response.data };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -102,7 +102,7 @@ export class Api {
       const tempSpValue = parseFloat(response.data);
       return { kind: 'ok', data: tempSpValue };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -116,7 +116,7 @@ export class Api {
       }
       return { kind: 'ok', data: response.data };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -130,7 +130,7 @@ export class Api {
       }
       return { kind: 'ok', data: response.data };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -145,7 +145,7 @@ export class Api {
       const occupancyValue = parseFloat(response.data);
       return { kind: 'ok', data: occupancyValue };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -160,7 +160,7 @@ export class Api {
 
       return { kind: 'ok', data: response.data };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -175,7 +175,7 @@ export class Api {
 
       return { kind: 'ok', data: response.data };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -189,7 +189,7 @@ export class Api {
       }
       return { kind: 'ok', data: response.data };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -204,7 +204,7 @@ export class Api {
       const value = parseFloat(response.data);
       return { kind: 'ok', data: value };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -218,7 +218,7 @@ export class Api {
       const value = parseFloat(response.data);
       return { kind: 'ok', data: value };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -232,7 +232,7 @@ export class Api {
       const value = parseFloat(response.data);
       return { kind: 'ok', data: value };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -246,7 +246,7 @@ export class Api {
       const value = parseFloat(response.data);
       return { kind: 'ok', data: value };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -263,7 +263,7 @@ export class Api {
       }
       return { kind: 'ok' };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -279,7 +279,7 @@ export class Api {
       }
       return { kind: 'ok' };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }
@@ -295,7 +295,7 @@ export class Api {
       }
       return { kind: 'ok' };
     } catch (error: unknown) {
-      console.log('FETCH: Error during request', error);
+      console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };
     }
   }

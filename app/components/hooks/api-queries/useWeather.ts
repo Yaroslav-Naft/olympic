@@ -18,10 +18,7 @@ export const useWeather = () => {
   const fetchWeatherTemp = useCallback(async () => {
     setWeatherLoading(true);
     try {
-      console.log('BEFORE API');
       const result = await api.getWeatherTemp();
-      console.log(result);
-      console.log('ATER API');
       if (result.kind === 'ok') {
         setWeather((prev) => ({ ...prev, outdoorAirTemp: result.data }));
       } else {
