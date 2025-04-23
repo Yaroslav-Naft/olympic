@@ -1,5 +1,5 @@
 import { api } from '@/services/api/api';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export interface TemperatureSetpointResponse {
   kind: 'ok' | 'error';
@@ -7,11 +7,20 @@ export interface TemperatureSetpointResponse {
   error?: string;
 }
 
+/**
+ * Custom hook for managing temperature setpoint operations.
+ * Provides functionality to fetch, increment, and decrement temperature setpoints.
+ *
+ * @returns {Object} An object containing temperature setpoint state and operations.
+ */
 export const useTempSetpoint = () => {
   const [tempSetpoint, setTempSetpoint] = useState<number | null>(0);
   const [spLoading, setSpLoading] = useState(false);
   const [error, setError] = useState('');
 
+  /**
+   * Fetches the current temperature setpoint from the API.
+   */
   const fetchTempSp = useCallback(async () => {
     setSpLoading(true);
     try {
@@ -30,10 +39,14 @@ export const useTempSetpoint = () => {
     }
   }, []);
 
-  async function incrementTempSp(increment: number) {
-    let newValue: null | number = null;
+  /**
+   * Increments the temperature setpoint by the specified amount.
+   *
+   * @param {number} increment - The amount to increase the temperature by.
+   */
+  const incrementTempSp = useCallback(async (increment: number) => {
+    let newValue: number | null = null;
 
-    //abstracted logic outside
     setTempSetpoint((prev) => {
       if (prev !== null && prev !== undefined) {
         newValue = prev + increment;
@@ -54,13 +67,16 @@ export const useTempSetpoint = () => {
       setError(`Error: ${err}`);
       console.error(`Error: ${err}`);
     }
-    return;
-  }
+  }, []);
 
-  async function decrementTempSp(decrement: number) {
-    let newValue: null | number = null;
+  /**
+   * Decrements the temperature setpoint by the specified amount.
+   *
+   * @param {number} decrement - The amount to decrease the temperature by.
+   */
+  const decrementTempSp = useCallback(async (decrement: number) => {
+    let newValue: number | null = null;
 
-    //abstracted logic outside
     setTempSetpoint((prev) => {
       if (prev !== null && prev !== undefined) {
         newValue = prev - decrement;
@@ -81,8 +97,7 @@ export const useTempSetpoint = () => {
       setError(`Error: ${err}`);
       console.error(`Error: ${err}`);
     }
-    return;
-  }
+  }, []);
 
   return {
     tempSetpoint,

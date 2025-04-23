@@ -1,8 +1,8 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
-import { Button, Card, Icon, Screen, Switch, SwitchToggleProps, Text } from '../components';
-import { DemoTabScreenProps } from '../navigators/DemoNavigator';
-import { $styles } from '../theme';
+import { Button, Card, Icon, Screen, Switch, SwitchToggleProps, Text } from '@/components';
+import { DemoTabScreenProps } from '@/navigators/DemoNavigator';
+import { $styles } from '@/theme';
 import type { ThemedStyle } from '@/theme';
 import { useAppTheme } from '@/utils/useAppTheme';
 import { ProfileCard } from '@/components/ProfileCard';
@@ -11,7 +11,7 @@ import { useDateTime } from '@/components/hooks/api-queries/useDateTime';
 import { useTemperature } from '@/components/hooks/api-queries/useTemperature';
 import { useTempSetpoint } from '@/components/hooks/api-mutations/useTempSetpoint';
 import { useBTUMeter } from '@/components/hooks/api-queries/useBTUMeter';
-import { useWaterMeter } from '@/components/hooks/api-queries/useWaterMeter';
+import { DefaultDeviceState, useWaterMeter } from '@/components/hooks/api-queries/useWaterMeter';
 import { useOccupancy } from '@/components/hooks/api-mutations/useOccupancy';
 import { useWeather } from '@/components/hooks/api-queries/useWeather';
 import { useHumidity } from '@/components/hooks/api-queries/useHumidity';
@@ -35,13 +35,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
     const { occupancy, changeOccupancy, fetchOccupancy } = useOccupancy();
     const { btuData, fetchSupplyTemp, fetchMonthlyCost, fetchRate, fetchAccumulatedConsumption } =
       useBTUMeter();
-    const {
-      waterData,
-      fetchShutoffValveStatus,
-      fetchDetectorStatus,
-      fetchLeakStatus,
-      postWaterShutoffValve,
-    } = useWaterMeter();
+    const { waterData, fetchShutoffValveStatus, fetchDetectorStatus } = useWaterMeter();
     const { weather, fetchWeatherTemp, fetchWeatherStatus } = useWeather();
 
     const refreshAllData = useCallback(async () => {
@@ -59,7 +53,6 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
           fetchAccumulatedConsumption(),
           fetchWeatherTemp(),
           fetchWeatherStatus(),
-          fetchLeakStatus(),
           fetchHumidity(),
         ]);
       } catch (err) {
@@ -119,27 +112,8 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                 <Text style={themed($label)}>Temperature Set Point</Text>
               </View>
               <View style={themed($contentContainer)}>
-                <View
-                  style={{
-                    backgroundColor: 'transparent',
-                    overflow: 'visible',
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 40,
-                      fontWeight: 'bold',
-                      fontFamily: 'System',
-                      color: '#374151',
-                      lineHeight: 48,
-                      includeFontPadding: false,
-                      textAlignVertical: 'center',
-                      backgroundColor: 'transparent',
-                      paddingTop: 0,
-                    }}
-                  >
-                    {tempSetpoint?.toFixed(1)}
-                  </Text>
+                <View style={themed($setpointValueContainer)}>
+                  <Text style={themed($setpointValueText)}>{tempSetpoint?.toFixed(1)}</Text>
                 </View>
                 <View style={themed($controlsContainer)}>
                   <TouchableOpacity
@@ -162,8 +136,8 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     style={themed(occupancy === '7' ? $iconButtonSelected : $iconButton)}
                     onPress={() => changeOccupancy('7')}
                   >
-                    <View style={{ flexDirection: 'row' }}>
-                      <View style={{ paddingTop: 3, paddingRight: 2 }}>
+                    <View style={$iconButtonRow}>
+                      <View style={$iconContainer}>
                         <Icon icon="power" color="#374151" size={15} />
                       </View>
                       <View>
@@ -177,8 +151,8 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     style={themed(occupancy === '1' ? $iconButtonSelected : $iconButton)}
                     onPress={() => changeOccupancy('1')}
                   >
-                    <View style={{ flexDirection: 'row' }}>
-                      <View style={{ paddingTop: 3, paddingRight: 2 }}>
+                    <View style={$iconButtonRow}>
+                      <View style={$iconContainer}>
                         <Icon icon="a" color="#374151" size={15} />
                       </View>
                       <View>
@@ -192,8 +166,8 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     style={themed(occupancy === '2' ? $iconButtonSelected : $iconButton)}
                     onPress={() => changeOccupancy('2')}
                   >
-                    <View style={{ flexDirection: 'row' }}>
-                      <View style={{ paddingTop: 3, paddingRight: 2 }}>
+                    <View style={$iconButtonRow}>
+                      <View style={$iconContainer}>
                         <Icon icon="sun" color="#374151" size={15} />
                       </View>
                       <View>
@@ -207,8 +181,8 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     style={themed(occupancy === '4' ? $iconButtonSelected : $iconButton)}
                     onPress={() => changeOccupancy('4')}
                   >
-                    <View style={{ flexDirection: 'row' }}>
-                      <View style={{ paddingTop: 3, paddingRight: 2 }}>
+                    <View style={$iconButtonRow}>
+                      <View style={$iconContainer}>
                         <Icon icon="snow" color="#374151" size={15} />
                       </View>
                       <View>
@@ -242,12 +216,6 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                       {waterData?.valveStatus === 'active' ? 'Closed' : 'Open'}
                     </Text>
                   </Text>
-                  {/* <TouchableOpacity
-                    onPress={() => postWaterShutoffValve('active')}
-                    style={themed($iconButton)}
-                  >
-                    <Text style={themed($buttonText)}>Valve</Text>
-                  </TouchableOpacity> */}
                 </View>
                 <View style={$detectorContainer}>
                   <Text style={themed($label)}>
@@ -255,7 +223,9 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     <Text
                       style={{ color: waterData?.detectorStatus === 'Active' ? 'red' : 'green' }}
                     >
-                      {waterData?.detectorStatus === 'Active' ? 'Leak Detected' : 'No Leak'}
+                      {waterData?.detectorStatus === DefaultDeviceState.Active
+                        ? 'Leak Detected'
+                        : 'No Leak'}
                     </Text>
                   </Text>
                 </View>
@@ -270,6 +240,32 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
 const $tempSetpointContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   marginBottom: 16,
 });
+
+const $setpointValueContainer: ThemedStyle<ViewStyle> = () => ({
+  backgroundColor: 'transparent',
+  overflow: 'visible',
+});
+
+const $setpointValueText: ThemedStyle<TextStyle> = () => ({
+  fontSize: 40,
+  fontWeight: 'bold',
+  fontFamily: 'System',
+  color: '#374151',
+  lineHeight: 48,
+  includeFontPadding: false,
+  textAlignVertical: 'center',
+  backgroundColor: 'transparent',
+  paddingTop: 0,
+});
+
+const $iconButtonRow: ViewStyle = {
+  flexDirection: 'row',
+};
+
+const $iconContainer: ViewStyle = {
+  paddingTop: 3,
+  paddingRight: 2,
+};
 
 const $temperatureCard: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   backgroundColor: 'white',
@@ -301,18 +297,15 @@ const $footerContainer: ViewStyle = {
   alignItems: 'center',
 };
 
-const $valveDetectorContainer: ViewStyle = {
-  // flexDirection: 'row',
-  // alignItems: 'center',
-};
+const $valveDetectorContainer: ViewStyle = {};
+
 const $valveContainer: ViewStyle = {
-  flexDirection: 'col',
-  // alignItems: 'center',
+  flexDirection: 'column',
 };
+
 const $detectorContainer: ViewStyle = {
   flexDirection: 'row',
   paddingTop: 5,
-  // alignItems: 'center',
 };
 
 const $footerItem: ViewStyle = {
@@ -336,24 +329,6 @@ const $controlsContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
 
 const $controlButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   width: 45,
-  height: 45,
-  borderRadius: 8,
-  borderWidth: 1,
-  borderColor: colors.palette.neutral200,
-  shadowColor: colors.palette.neutral800,
-  verticalAlign: 'center',
-  backgroundColor: 'white',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: 0,
-  shadowOffset: { width: 0, height: 1 },
-  shadowOpacity: 0.1,
-  shadowRadius: 2,
-  elevation: 1,
-});
-
-const $valveControlButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  width: 70,
   height: 45,
   borderRadius: 8,
   borderWidth: 1,

@@ -1,17 +1,20 @@
 import { api } from '@/services/api/api';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+export enum DefaultDeviceState {
+  Active = 'Active',
+  Inactive = 'Inactive',
+}
+
 interface WaterMeterData {
-  valveStatus: string | null;
-  detectorStatus: string | null;
-  leakStatus: string | null;
+  valveStatus: DefaultDeviceState | null;
+  detectorStatus: DefaultDeviceState | null;
 }
 
 export const useWaterMeter = (refreshInterval = 10000) => {
   const [waterData, setWaterData] = useState<WaterMeterData>({
     valveStatus: null,
     detectorStatus: null,
-    leakStatus: null,
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -30,20 +33,6 @@ export const useWaterMeter = (refreshInterval = 10000) => {
       }
     } catch (err) {
       setErrors((prev) => ({ ...prev, valveStatus: `Error: ${err}` }));
-    }
-  }, []);
-
-  const fetchLeakStatus = useCallback(async () => {
-    try {
-      const result = await api.getLeakStatus();
-      if (result.kind === 'ok') {
-        setWaterData((prev) => ({ ...prev, leakStatus: result.data }));
-        setErrors((prev) => ({ ...prev }));
-      } else if (result.kind === 'error') {
-        setErrors((prev) => ({ ...prev, leakStatus: '' }));
-      }
-    } catch (err) {
-      setErrors((prev) => ({ ...prev, leakStatus: `Error: ${err}` }));
     }
   }, []);
 
@@ -100,15 +89,13 @@ export const useWaterMeter = (refreshInterval = 10000) => {
         }
       };
     }
-    return undefined;
+    return;
   }, [refreshAllWaterData, refreshInterval]);
 
   return {
     waterData,
-    // Individual fetch functions (useful for granular refreshes)
     fetchShutoffValveStatus,
     fetchDetectorStatus,
-    fetchLeakStatus,
     postWaterShutoffValve,
     isLoading,
     errors,
