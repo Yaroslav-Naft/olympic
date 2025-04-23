@@ -50,6 +50,7 @@ export const useWaterMeter = (refreshInterval = 10000) => {
   const fetchDetectorStatus = useCallback(async () => {
     try {
       const result = await api.getWaterDetectorStatus();
+
       if (result.kind === 'ok') {
         setWaterData((prev) => ({ ...prev, detectorStatus: result.data }));
         setErrors((prev) => ({ ...prev, detectorStatus: '' }));
