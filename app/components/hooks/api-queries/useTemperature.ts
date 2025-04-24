@@ -7,11 +7,10 @@ export interface TemperatureResponse {
   error?: string;
 }
 
-export const useTemperature = (refreshInterval = 10000) => {
+export const useTemperature = () => {
   const [temp, setTemp] = useState<number | null>();
   const [tempLoading, setTempIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const intervalRef = useRef<NodeJS.Timeout>();
 
   const fetchTemp = useCallback(async () => {
     setTempIsLoading(true);
