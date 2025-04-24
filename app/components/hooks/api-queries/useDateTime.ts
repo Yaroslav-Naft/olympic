@@ -28,9 +28,17 @@ export const useDateTime = () => {
             weekday: 'short',
             month: 'short',
             day: 'numeric',
+            timeZone: 'America/Los_Angeles',
           })
           .replace(',', '');
-        setDateTime({ ...result.data, date: formattedDate });
+        // const formattedTime = date.toLocaleTimeString('en-US', {
+        //   hour: 'numeric',
+        //   // minute: '2-digit',
+        //   hour12: false,
+        //   timeZone: 'America/Los_Angeles',
+        // });
+
+        setDateTime({ timeZone: 'PST', date: formattedDate, time: '' });
       } else {
         setError('Failed to load Date Time data');
       }

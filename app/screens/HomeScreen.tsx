@@ -111,7 +111,8 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                   </View>
                   <View style={$footerItem}>
                     <Text style={themed($footerText)}>
-                      {dateTime.date} 🕒 {dateTime.time}
+                      📅 {dateTime.date}
+                      {/* {dateTime.time} */}
                     </Text>
                   </View>
                 </View>
@@ -151,7 +152,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                         <Icon icon="power" color="#374151" size={15} />
                       </View>
                       <View>
-                        <Text size="xs"> On</Text>
+                        <Text size="xs"> Off</Text>
                       </View>
                     </View>
                   </TouchableOpacity>
@@ -207,10 +208,10 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
               <View>
                 <Text style={themed($label)}>Rate: {btuData.rate?.toString() ?? '0.0'} BTU/hr</Text>
                 <Text style={themed($label)}>
-                  Accum. Consumption: {btuData.accumulatedConsumption?.toFixed(2) ?? '--'} BTU
+                  Accum. Consumption: {btuData.accumulatedConsumption?.toFixed(1) ?? '--'} BTU
                 </Text>
                 <Text style={themed($label)}>
-                  Monthly Cost: {btuData.monthlyCost?.toFixed(2) ?? '0.0'} CAD
+                  Monthly Cost: {btuData.monthlyCost?.toFixed(2) ?? '0.0'} $
                 </Text>
                 <Text style={themed($label)}>
                   DCW Meter Consumption: {btuData.accumulatedConsumption?.toFixed(1) ?? '--'} L
