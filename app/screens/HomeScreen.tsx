@@ -211,7 +211,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                   Accum. Consumption: {btuData.accumulatedConsumption?.toFixed(1) ?? '--'} BTU
                 </Text>
                 <Text style={themed($label)}>
-                  Monthly Cost: {btuData.monthlyCost?.toFixed(2) ?? '0.0'} $
+                  Monthly Cost: {btuData.monthlyCost?.toFixed(2) ?? '0.0'} $ (CAD)
                 </Text>
                 <Text style={themed($label)}>
                   DCW Meter Consumption: {btuData.accumulatedConsumption?.toFixed(1) ?? '--'} L
@@ -318,6 +318,7 @@ const $temperatureContent: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
 const $footerContainer: ViewStyle = {
   flexDirection: 'row',
   alignItems: 'center',
+  // justifyContent: 'space-between',
 };
 
 const $valveDetectorContainer: ViewStyle = {};
