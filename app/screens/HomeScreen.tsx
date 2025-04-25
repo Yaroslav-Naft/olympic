@@ -219,7 +219,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
               <View style={$valveDetectorContainer}>
                 <View style={$valveContainer}>
                   <Text style={themed($label)}>
-                    Shutoff Valve Status:
+                    Shutoff Valve Status:{' '}
                     <Text
                       style={{
                         color:
