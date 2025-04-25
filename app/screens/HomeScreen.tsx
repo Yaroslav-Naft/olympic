@@ -41,12 +41,12 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
     const { humidity, fetchHumidity, humidityLoading } = useHumidity();
     const { tempSetpoint, incrementTempSp, decrementTempSp, spLoading, fetchTempSp } =
       useTempSetpoint();
-    const { dateTime, fetchDateTime, dateTimeLoading } = useDateTime();
+    const { dateTime, refetchDateTime, dateTimeLoading } = useDateTime();
     const { occupancy, changeOccupancy, fetchOccupancy } = useOccupancy();
     const { btuData, fetchSupplyTemp, fetchMonthlyCost, fetchRate, fetchAccumulatedConsumption } =
       useBTUMeter();
     const { waterData, fetchShutoffValveStatus, fetchDetectorStatus } = useWaterMeter();
-    const { weather, fetchWeatherTemp, fetchWeatherStatus } = useWeather();
+    const { weather, refetchWeatherTemp, refetchWeatherStatus } = useWeather();
 
     const refreshAllData = useCallback(async () => {
       try {
@@ -54,21 +54,21 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
           fetchTemp(),
           fetchOccupancy(),
           fetchTempSp(),
-          fetchDateTime(),
+          refetchDateTime(),
           fetchShutoffValveStatus(),
           fetchDetectorStatus(),
           fetchSupplyTemp(),
           fetchMonthlyCost(),
           fetchRate(),
           fetchAccumulatedConsumption(),
-          fetchWeatherTemp(),
-          fetchWeatherStatus(),
+          refetchWeatherTemp(),
+          refetchWeatherStatus(),
           fetchHumidity(),
         ]);
       } catch (err) {
         console.error(`error fetching data ${err}`);
       }
-    }, [fetchTemp, fetchTempSp, fetchDateTime]);
+    }, [fetchTemp, fetchTempSp, refetchDateTime]);
 
     const isLoading = tempLoading || spLoading || dateTimeLoading || humidityLoading;
 

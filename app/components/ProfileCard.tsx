@@ -61,5 +61,4 @@ const $contentContainer: ThemedStyle<ViewStyle> = () => ({
   flexDirection: 'row',
   justifyContent: 'flex-start',
   alignItems: 'center',
-  // marginBottom: 16,
 });

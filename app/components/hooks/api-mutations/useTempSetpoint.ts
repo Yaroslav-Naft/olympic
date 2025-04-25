@@ -52,7 +52,6 @@ export const useTempSetpoint = () => {
         newValue = prev + increment;
         return newValue;
       }
-      //if undefined or null return previous value
       return prev;
     });
 
@@ -82,13 +81,13 @@ export const useTempSetpoint = () => {
         newValue = prev - decrement;
         return newValue;
       }
-      //if undefined or null return previous value
       return prev;
     });
 
     if (newValue === null) return;
 
     try {
+      //TODO: fix type error
       const result = await api.postTempSetpoint(newValue?.toFixed(1));
       if (result.kind !== 'ok') {
         throw new Error('Failed to update');

@@ -38,17 +38,14 @@ const $temperatureCard: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   elevation: 2,
 });
 
-const $content: ThemedStyle<TextStyle> = ({ colors }) => ({
+const $content: ThemedStyle<TextStyle> = () => ({
   fontSize: 15,
-  // width: 100,
-  // height: 100,
 });
 
 const $greetingContainer: ThemedStyle<TextStyle> = ({ colors }) => ({
   marginBottom: 5,
   width: 90,
   paddingTop: 10,
-  // height: 100,
 });
 
 const $nameStyling: ThemedStyle<TextStyle> = ({ colors }) => ({
@@ -64,10 +61,7 @@ const $contentContainer: ThemedStyle<ViewStyle> = () => ({
   flexDirection: 'row',
   justifyContent: 'flex-start',
   alignItems: 'flex-start',
-  // marginLeft: 10,
-  // marginRight: 10,
   width: 170,
-  // marginBottom: 16,
 });
 
 const $imageStyle: ImageStyle = {

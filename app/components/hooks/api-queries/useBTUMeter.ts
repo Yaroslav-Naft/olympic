@@ -1,13 +1,6 @@
 import { api } from '@/services/api/api';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-// export interface BTUMeterData {
-//   supplyTemp: number | null;
-//   monthlyCost: number | null;
-//   rate: number | null;
-//   accumulatedConsumption: number | null;
-// }
-
 interface BTUMeterData {
   supplyTemp: number | null;
   monthlyCost: number | null;
@@ -125,7 +118,6 @@ export const useBTUMeter = (refreshInterval = 10000) => {
     isLoading,
     errors,
     refreshAllBTUData,
-    // Individual fetch functions (useful for granular refreshes)
     fetchSupplyTemp,
     fetchMonthlyCost,
     fetchRate,

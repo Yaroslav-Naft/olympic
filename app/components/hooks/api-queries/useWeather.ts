@@ -1,60 +1,75 @@
 import { api } from '@/services/api/api';
-import { parse } from 'date-fns';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 interface Weather {
   outdoorAirTemp: string;
   status: string;
 }
 
-export const useWeather = () => {
+/**
+ * A custom hook that fetches and manages weather information from the API.
+ * Provides real-time updates of the outdoor air temperature and weather status.
+ *
+ * @returns {object} An object containing:
+ *   - weather: The current Weather object with outdoor temperature and status
+ *   - error: Any error that occurred during the fetch
+ *   - isLoading: Boolean indicating if the data is being fetched
+ *   - refetchTemp: Function to manually trigger a refresh of the temperature
+ *   - refetchStatus: Function to manually trigger a refresh of the status
+ */
+export function useWeather() {
   const [weather, setWeather] = useState<Weather>({
     outdoorAirTemp: '',
     status: '',
   });
-  const [weatherLoading, setWeatherLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchWeatherTemp = useCallback(async () => {
-    setWeatherLoading(true);
+    setIsLoading(true);
+    setError(null);
+
     try {
       const result = await api.getWeatherTemp();
       if (result.kind === 'ok') {
         setWeather((prev) => ({ ...prev, outdoorAirTemp: result.data }));
+      } else if (result.kind === 'error') {
+        setError(result.error);
       } else {
-        setError('Failed to load Weather data');
+        setError('Failed to process weather temperature data');
       }
     } catch (err) {
-      setError(`Error: ${err}`);
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {
-      setWeatherLoading(false);
+      setIsLoading(false);
     }
   }, []);
 
   const fetchWeatherStatus = useCallback(async () => {
-    setWeatherLoading(true);
+    setIsLoading(true);
+    setError(null);
+
     try {
       const result = await api.getWeatherStatus();
       if (result.kind === 'ok') {
         setWeather((prev) => ({ ...prev, status: result.data }));
+      } else if (result.kind === 'error') {
+        setError(result.error);
       } else {
-        setError('Failed to load Weather data');
+        setError('Failed to process weather status data');
       }
     } catch (err) {
-      setError(`Error: ${err}`);
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {
-      setWeatherLoading(false);
+      setIsLoading(false);
     }
   }, []);
 
   return {
     weather,
-    setWeather,
-    weatherLoading,
-    setWeatherLoading,
     error,
-    setError,
-    fetchWeatherTemp,
-    fetchWeatherStatus,
+    isLoading,
+    refetchWeatherTemp: fetchWeatherTemp,
+    refetchWeatherStatus: fetchWeatherStatus,
   };
-};
+}

@@ -3,9 +3,6 @@ import { CompositeScreenProps } from '@react-navigation/native';
 import { TextStyle, ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon } from '../components';
-import { translate } from '@/i18n';
-import { DemoCommunityScreen, DemoShowroomScreen, DemoDebugScreen } from '../screens';
-import { DemoPodcastListScreen } from '../screens/DemoPodcastListScreen';
 import type { ThemedStyle } from '@/theme';
 import { AppStackParamList, AppStackScreenProps } from './AppNavigator';
 import { useAppTheme } from '@/utils/useAppTheme';
@@ -22,11 +19,6 @@ export type DemoTabParamList = {
   DemoPodcastList: undefined;
 };
 
-/**
- * Helper for automatically generating navigation prop types for each route.
- *
- * More info: https://reactnavigation.org/docs/typescript/#organizing-types
- */
 export type DemoTabScreenProps<T extends keyof DemoTabParamList> = CompositeScreenProps<
   BottomTabScreenProps<DemoTabParamList, T>,
   AppStackScreenProps<keyof AppStackParamList>
@@ -101,20 +93,6 @@ export function DemoNavigator() {
         }}
       />
 
-      {/* Shows all of the components */}
-      {/* <Tab.Screen
-        name="DemoShowroom"
-        component={DemoShowroomScreen}
-        options={{
-          tabBarLabel: translate("demoNavigator:componentsTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="community" color={focused ? colors.tint : colors.tintInactive} size={30} />
-          ),
-        }} 
-      />
-
-      {/* NOTE: Keep this tab for troubleshooting */}
-      {/* <Tab.Screen
       {/* NOTE: Keep this tab for troubleshooting */}
       {/* <Tab.Screen
         name="DemoDebug"

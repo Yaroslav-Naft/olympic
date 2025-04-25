@@ -8,17 +8,29 @@ interface DateTime {
   date: string;
 }
 
-export const useDateTime = () => {
+/**
+ * A custom hook that fetches and manages date and time information from the API.
+ * Provides real-time updates of the current date, time, and timezone.
+ *
+ * @returns {object} An object containing:
+ *   - dateTime: The current DateTime object with timezone, time, and date
+ *   - error: Any error that occurred during the fetch
+ *   - dateTimeLoading: Boolean indicating if the data is being fetched
+ *   - refetch: Function to manually trigger a refresh of the data
+ */
+export function useDateTime() {
   const [dateTime, setDateTime] = useState<DateTime>({
     timeZone: '',
     time: '',
     date: '',
   });
-  const [dateTimeLoading, setDameTimeLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [dateTimeLoading, setDateTimeLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchDateTime = useCallback(async () => {
-    setDameTimeLoading(true);
+    setDateTimeLoading(true);
+    setError(null);
+
     try {
       const result = await api.getDateTime();
       if (result.kind === 'ok') {
@@ -31,31 +43,28 @@ export const useDateTime = () => {
             timeZone: 'America/Los_Angeles',
           })
           .replace(',', '');
-        // const formattedTime = date.toLocaleTimeString('en-US', {
-        //   hour: 'numeric',
-        //   // minute: '2-digit',
-        //   hour12: false,
-        //   timeZone: 'America/Los_Angeles',
-        // });
 
-        setDateTime({ timeZone: 'PST', date: formattedDate, time: '' });
+        setDateTime({
+          timeZone: 'PST',
+          date: formattedDate,
+          time: result.data.time,
+        });
+      } else if (result.kind === 'error') {
+        setError(result.error);
       } else {
-        setError('Failed to load Date Time data');
+        setError('Failed to process date/time data');
       }
     } catch (err) {
-      setError(`Error: ${err}`);
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {
-      setDameTimeLoading(false);
+      setDateTimeLoading(false);
     }
   }, []);
 
   return {
     dateTime,
-    setDateTime,
-    dateTimeLoading,
-    setDameTimeLoading,
     error,
-    setError,
-    fetchDateTime,
+    dateTimeLoading,
+    refetchDateTime: fetchDateTime,
   };
-};
+}
