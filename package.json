@@ -5,9 +5,11 @@
   "main": "index.tsx",
   "scripts": {
     "compile": "tsc --noEmit -p . --pretty",
-    "lint": "eslint . --fix",
+
     "lint:check": "eslint .",
-    
+    "lint": "eslint 'src/**/*.{js,ts,tsx}'",
+    "format": "prettier --write 'src/**/*.{js,ts,tsx,json,css,scss,md}'",
+    "typecheck": "tsc --noEmit",
     "patch": "patch-package",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -28,6 +30,7 @@
     "serve:web": "npx serve dist",
     "prebuild:clean": "npx expo prebuild --clean",
     "prepare": "husky"
+
   },
   "dependencies": {
     "@expo-google-fonts/space-grotesk": "^0.2.2",
