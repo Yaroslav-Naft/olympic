@@ -4,11 +4,14 @@
   "useTabs": false,
   "semi": true,
   "singleQuote": true,
-  "trailingComma": "es5",
-  "bracketSpacing": true,
-  "arrowParens": "avoid",
-  "endOfLine": "lf",
+  "quoteProps": "as-needed",
   "jsxSingleQuote": false,
+  "trailingComma": "all",
+  "bracketSpacing": true,
   "bracketSameLine": false,
-  "quoteProps": "as-needed"
+  "arrowParens": "always",
+  "embeddedLanguageFormatting": "auto",
+  "endOfLine": "lf",
+  "proseWrap": "preserve",
+  "htmlWhitespaceSensitivity": "css"
 }
