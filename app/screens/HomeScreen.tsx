@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
-import { Button, Card, Icon, Screen, Switch, SwitchToggleProps, Text } from '@/components';
+import { Card, Icon, Screen, Switch, SwitchToggleProps, Text } from '@/components';
 import { DemoTabScreenProps } from '@/navigators/DemoNavigator';
 import { $styles } from '@/theme';
 import type { ThemedStyle } from '@/theme';
@@ -110,10 +110,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
                     </Text>
                   </View>
                   <View style={$footerItem}>
-                    <Text style={themed($footerText)}>
-                      📅 {dateTime.date}
-                      {/* {dateTime.time} */}
-                    </Text>
+                    <Text style={themed($footerText)}>📅 {dateTime.date}</Text>
                   </View>
                 </View>
               }
@@ -222,7 +219,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
               <View style={$valveDetectorContainer}>
                 <View style={$valveContainer}>
                   <Text style={themed($label)}>
-                    Shutoff Valve Status: {/* using 'active' instead of Active for some reason */}
+                    Shutoff Valve Status:
                     <Text
                       style={{
                         color:
@@ -260,7 +257,7 @@ export const HomeScreen: FC<DemoTabScreenProps<'Home' | 'Calendar' | 'Comfort' |
     );
   };
 
-const $tempSetpointContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+const $tempSetpointContainer: ThemedStyle<ViewStyle> = () => ({
   marginBottom: 16,
 });
 
@@ -318,7 +315,6 @@ const $temperatureContent: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
 const $footerContainer: ViewStyle = {
   flexDirection: 'row',
   alignItems: 'center',
-  // justifyContent: 'space-between',
 };
 
 const $valveDetectorContainer: ViewStyle = {};
@@ -342,7 +338,7 @@ const $footerText: ThemedStyle<TextStyle> = ({ colors }) => ({
   color: colors.textDim,
 });
 
-const $controlsContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+const $controlsContainer: ThemedStyle<ViewStyle> = () => ({
   flexDirection: 'row',
   position: 'absolute',
   verticalAlign: 'center',
@@ -351,7 +347,7 @@ const $controlsContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   gap: 12,
 });
 
-const $controlButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+const $controlButton: ThemedStyle<ViewStyle> = ({ colors }) => ({
   width: 45,
   height: 45,
   borderRadius: 8,
@@ -369,7 +365,7 @@ const $controlButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   elevation: 1,
 });
 
-const $buttonText: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
+const $buttonText: ThemedStyle<TextStyle> = ({ colors }) => ({
   fontSize: 22,
   color: colors.palette.neutral800,
   textAlign: 'center',
@@ -379,7 +375,7 @@ const $buttonText: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
   fontFamily: 'System',
 });
 
-const $title: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
+const $title: ThemedStyle<TextStyle> = ({ spacing }) => ({
   marginBottom: spacing.sm,
   fontFamily: 'System',
 });
@@ -400,7 +396,7 @@ const $iconButton: ThemedStyle<ViewStyle> = ({ colors }) => ({
   alignItems: 'center',
 });
 
-const $iconButtonSelected: ThemedStyle<ViewStyle> = ({ colors }) => ({
+const $iconButtonSelected: ThemedStyle<ViewStyle> = () => ({
   width: 80,
   height: 36,
   borderRadius: 10,
@@ -425,7 +421,7 @@ const $bottomContainer: ThemedStyle<ViewStyle> = () => ({
   justifyContent: 'space-between',
 });
 
-const $label: ThemedStyle<TextStyle> = ({ colors }) => ({
+const $label: ThemedStyle<TextStyle> = () => ({
   fontSize: 14,
   color: '#6b7280',
   marginBottom: 8,
