@@ -1,4 +1,4 @@
-import { View, ViewStyle, TextStyle, Image, ImageSourcePropType } from 'react-native';
+import { View, ViewStyle, TextStyle, Image, ImageSourcePropType, ImageStyle } from 'react-native';
 import { Card } from './Card';
 import { Icon, Text } from '../components';
 import type { ThemedStyle } from '@/theme';
@@ -64,7 +64,7 @@ const $contentContainer: ThemedStyle<ViewStyle> = () => ({
   width: 170,
 });
 
-const $imageStyle: ImageStyle = {
+const $imageStyle: ThemedStyle<ImageStyle> = () => ({
   height: 60,
   width: 60,
 };
