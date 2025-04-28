@@ -10,7 +10,7 @@ import { HomeScreen } from '@/screens/HomeScreen';
 import { BlankScreen } from '@/screens/BlankScreen';
 
 export type DemoTabParamList = {
-  Community: undefined;
+  DemoCommunity: undefined;
   Home: undefined;
   Calendar: undefined;
   Comfort: undefined;
