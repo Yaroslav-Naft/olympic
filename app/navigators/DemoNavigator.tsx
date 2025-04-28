@@ -17,6 +17,7 @@ export type DemoTabParamList = {
   Settings: undefined;
   DemoShowroom: { queryIndex?: string; itemIndex?: string };
   DemoPodcastList: undefined;
+  DemoDebug: undefined;
 };
 
 export type DemoTabScreenProps<T extends keyof DemoTabParamList> = CompositeScreenProps<
