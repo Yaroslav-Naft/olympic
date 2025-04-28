@@ -1,11 +1,11 @@
 import { View, ViewStyle, TextStyle } from 'react-native';
 import { Card } from './Card';
-import { Icon, Text } from '../components';
+import { Icon, IconTypes, Text } from '../components';
 import type { ThemedStyle } from '@/theme';
 import { useAppTheme } from '@/utils/useAppTheme';
 
 interface ProfileCardProps {
-  iconType: string;
+  iconType: IconTypes;
   txContent: string;
   profileName: string;
   size: number;
