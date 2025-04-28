@@ -44,59 +44,50 @@ export const useTempSetpoint = () => {
    *
    * @param {number} increment - The amount to increase the temperature by.
    */
-  const incrementTempSp = useCallback(async (increment: number) => {
-    let newValue: number | null = null;
+  const incrementTempSp = useCallback(
+    async (increment: number) => {
+      if (typeof tempSetpoint !== 'number') return;
 
-    setTempSetpoint((prev) => {
-      if (prev !== null && prev !== undefined) {
-        newValue = prev + increment;
-        return newValue;
+      const newValue = tempSetpoint + increment;
+      setTempSetpoint(newValue);
+
+      try {
+        const result = await api.postTempSetpoint(newValue?.toFixed(1));
+        if (result.kind !== 'ok') {
+          throw new Error('Failed to update');
+        }
+      } catch (err) {
+        setError(`Error: ${err}`);
+        console.error(`Error: ${err}`);
       }
-      return prev;
-    });
-
-    if (newValue === null) return;
-
-    try {
-      const result = await api.postTempSetpoint(newValue?.toFixed(1));
-      if (result.kind !== 'ok') {
-        throw new Error('Failed to update');
-      }
-    } catch (err) {
-      setError(`Error: ${err}`);
-      console.error(`Error: ${err}`);
-    }
-  }, []);
+    },
+    [tempSetpoint],
+  );
 
   /**
    * Decrements the temperature setpoint by the specified amount.
    *
    * @param {number} decrement - The amount to decrease the temperature by.
    */
-  const decrementTempSp = useCallback(async (decrement: number) => {
-    let newValue: number | null = null;
+  const decrementTempSp = useCallback(
+    async (decrement: number) => {
+      if (typeof tempSetpoint !== 'number') return;
 
-    setTempSetpoint((prev) => {
-      if (prev !== null && prev !== undefined) {
-        newValue = prev - decrement;
-        return newValue;
+      const newValue = tempSetpoint - decrement;
+      setTempSetpoint(newValue);
+
+      try {
+        const result = await api.postTempSetpoint(newValue?.toFixed(1));
+        if (result.kind !== 'ok') {
+          throw new Error('Failed to update');
+        }
+      } catch (err) {
+        setError(`Error: ${err}`);
+        console.error(`Error: ${err}`);
       }
-      return prev;
-    });
-
-    if (newValue === null) return;
-
-    try {
-      //TODO: fix type error
-      const result = await api.postTempSetpoint(newValue?.toFixed(1));
-      if (result.kind !== 'ok') {
-        throw new Error('Failed to update');
-      }
-    } catch (err) {
-      setError(`Error: ${err}`);
-      console.error(`Error: ${err}`);
-    }
-  }, []);
+    },
+    [tempSetpoint],
+  );
 
   return {
     tempSetpoint,

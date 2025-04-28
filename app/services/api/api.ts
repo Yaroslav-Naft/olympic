@@ -203,15 +203,15 @@ export class Api {
     }
   }
 
-  async getOccupancy(): Promise<GetTResult<number>> {
+  async getOccupancy(): Promise<GetTResult<string>> {
     try {
       const response: ApiResponse<string> = await this.apisauce.get('/occupancy');
 
       if (!response.data || !response.ok) {
         return { kind: 'error', error: 'Failed to fetch Occupancy' };
       }
-      const occupancyValue = parseFloat(response.data);
-      return { kind: 'ok', data: occupancyValue };
+
+      return { kind: 'ok', data: response.data };
     } catch (error: unknown) {
       console.error('FETCH: Error during request', error);
       return { kind: 'bad-data' };

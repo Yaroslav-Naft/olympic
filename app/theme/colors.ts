@@ -16,10 +16,10 @@ const palette = {
   primary500: '#C76542',
   primary600: '#A54F31',
 
-  // secondary100: '#DCDDE9',
-  // secondary200: '#BCC0D6',
-  // secondary300: '#9196B9',
-  // secondary400: '#626894',
+  secondary100: '#DCDDE9',
+  secondary200: '#BCC0D6',
+  secondary300: '#9196B9',
+  secondary400: '#626894',
   secondary500: '#5D4AFF',
 
   accent100: '#FFEED4',
