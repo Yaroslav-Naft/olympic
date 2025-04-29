@@ -10,13 +10,14 @@ import { HomeScreen } from '@/screens/HomeScreen';
 import { BlankScreen } from '@/screens/BlankScreen';
 
 export type DemoTabParamList = {
-  Community: undefined;
+  DemoCommunity: undefined;
   Home: undefined;
   Calendar: undefined;
   Comfort: undefined;
   Settings: undefined;
   DemoShowroom: { queryIndex?: string; itemIndex?: string };
   DemoPodcastList: undefined;
+  DemoDebug: undefined;
 };
 
 export type DemoTabScreenProps<T extends keyof DemoTabParamList> = CompositeScreenProps<

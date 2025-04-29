@@ -41,7 +41,7 @@ export const useWaterMeter = (refreshInterval = 10000) => {
       const result = await api.getWaterDetectorStatus();
 
       if (result.kind === 'ok') {
-        setWaterData((prev) => ({ ...prev, detectorStatus: result.data }));
+        setWaterData((prev) => ({ ...prev, detectorStatus: result.data }) as WaterMeterData);
         setErrors((prev) => ({ ...prev, detectorStatus: '' }));
       } else if (result.kind === 'error') {
         setErrors((prev) => ({ ...prev, detectorStatus: result.error }));
@@ -51,11 +51,11 @@ export const useWaterMeter = (refreshInterval = 10000) => {
     }
   }, []);
 
-  const postWaterShutoffValve = useCallback(async (value: string): Promise<void> => {
+  const postWaterShutoffValve = useCallback(async (value: string) => {
     try {
       const result = await api.postWaterShutoffValve(value);
       if (result.kind === 'ok') {
-        setWaterData((prev) => ({ ...prev, valveStatus: value }));
+        setWaterData((prev) => ({ ...prev, valveStatus: value }) as WaterMeterData);
         setErrors((prev) => ({ ...prev, valveStatus: '' }));
       } else if (result.kind === 'error') {
         setErrors((prev) => ({ ...prev, valveStatus: result.error }));

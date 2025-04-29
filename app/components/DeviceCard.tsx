@@ -1,4 +1,12 @@
-import { View, ViewStyle, TextStyle, Image, ImageSourcePropType } from 'react-native';
+import {
+  View,
+  ViewStyle,
+  TextStyle,
+  Image,
+  ImageSourcePropType,
+  ImageStyle,
+  StyleProp,
+} from 'react-native';
 import { Card } from './Card';
 import { Icon, Text } from '../components';
 import type { ThemedStyle } from '@/theme';
@@ -16,7 +24,7 @@ export const DeviceCard = ({ imageSrc, deviceName, children }: DeviceCardProps) 
     <Card style={themed($temperatureCard)}>
       <View style={themed($contentContainer)}>
         <View style={themed($iconButtonContainer)}>
-          <Image source={imageSrc as ImageSourcePropType | undefined} style={$imageStyle} />
+          <Image source={imageSrc as ImageSourcePropType | undefined} style={themed($imageStyle)} />
           <View style={themed($greetingContainer)}>
             <Text style={themed($content)}>{deviceName}</Text>
           </View>
@@ -48,10 +56,6 @@ const $greetingContainer: ThemedStyle<TextStyle> = ({ colors }) => ({
   paddingTop: 10,
 });
 
-const $nameStyling: ThemedStyle<TextStyle> = ({ colors }) => ({
-  fontSize: 23,
-});
-
 const $iconButtonContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   paddingRight: 10,
   paddingBottom: 10,
@@ -64,7 +68,7 @@ const $contentContainer: ThemedStyle<ViewStyle> = () => ({
   width: 170,
 });
 
-const $imageStyle: ImageStyle = {
+const $imageStyle: ThemedStyle<ImageStyle> = () => ({
   height: 60,
   width: 60,
-};
+});
