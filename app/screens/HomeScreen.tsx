@@ -1,5 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  ImageSourcePropType,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { Card, Icon, Screen, Switch, SwitchToggleProps, Text } from '@/components';
 import { DemoTabScreenProps } from '@/navigators/DemoNavigator';
 import { $styles } from '@/theme';
@@ -87,7 +94,7 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
     {
       name: 'waterDetector:title',
       imageSrc: meterImage,
-      component: WaterDetectorCard,
+      component: <WaterDetectorCard />,
     },
   ];
 
