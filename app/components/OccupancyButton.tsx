@@ -1,11 +1,11 @@
 import { useAppTheme } from '@/utils/useAppTheme';
 import { View, ViewStyle, TouchableOpacity } from 'react-native';
-import { Icon } from './Icon';
+import { Icon, IconTypes } from './Icon';
 import { ThemedStyle } from '@/theme';
 import { Text } from './Text';
 
 interface OccupancyButtonProps {
-  icon: string;
+  icon: IconTypes;
   label: string;
   value: string;
   currentValue: string;
@@ -30,7 +30,7 @@ export const OccupancyButton: React.FC<OccupancyButtonProps> = ({
       >
         <View style={$iconButtonRow}>
           <View style={$iconContainer}>
-            <Icon icon="power" color="#374151" size={15} />
+            <Icon icon={icon} color="#374151" size={15} />
           </View>
           <View>
             <Text size="xs">{label}</Text>

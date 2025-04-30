@@ -1,10 +1,10 @@
 const homeScreen = {
-  title: 'ECY - STAT',
   profile: {
     greeting: 'Bonjour 👋',
     location: 'Fortis BC @ 1111 West Georgia St',
   },
   temperature: {
+    title: 'ECY - STAT',
     indoorTemp: 'Température intérieure',
     tempPlaceholder: '--°C',
     outdoorTemp: '🌥 {{temp}}°C',

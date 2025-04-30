@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { Card, Icon, Screen, Switch, SwitchToggleProps, Text } from '@/components';
+import { Card, Screen, Switch, SwitchToggleProps, Text } from '@/components';
 import { DemoTabScreenProps } from '@/navigators/DemoNavigator';
 import { $styles } from '@/theme';
 import type { ThemedStyle } from '@/theme';
@@ -67,7 +67,7 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
 
   const deviceConfigs: DeviceConfig[] = [
     {
-      name: 'meter:fortisBcSuite',
+      name: 'meter:fortisBCSuite',
       imageSrc: meterImage,
       metrics: [
         {
@@ -110,7 +110,7 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
 
   return (
     <Screen preset="scroll" contentContainerStyle={$styles.container} safeAreaEdges={['top']}>
-      <Text preset="heading" size="md" text={t('title')} style={themed($title)} />
+      <Text preset="heading" size="md" text={t('temperature:title')} style={themed($title)} />
       {isLoading ? (
         <ActivityIndicator size="large" style={$spinner} />
       ) : (
@@ -124,12 +124,12 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
           <Card
             heading={
               temp !== null
-                ? t('temperature:indoorValue', { temp: temp?.toFixed(2) })
-                : t('temperature:placeholder')
+                ? t('temperature:indoorTemp', { temp: temp?.toFixed(2) })
+                : t('temperature:indoorTempPlaceholder')
             }
             style={themed($temperatureCard)}
             headingStyle={themed($temperatureHeading)}
-            content={t('temperature:indoorTemp')}
+            content={t('temperature:indoorTempLabel')}
             contentStyle={themed($temperatureContent)}
             FooterComponent={
               <View style={$footerContainer}>
@@ -139,7 +139,7 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
                       ? t('temperature:outdoorTemp', {
                           temp: weather?.outdoorAirTemp,
                         })
-                      : t('temperature:placeholder')}
+                      : t('temperature:outdoorTempPlaceHolder')}
                     |{' '}
                   </Text>
                 </View>
