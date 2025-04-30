@@ -61,7 +61,6 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
   const devicesArray = [
     {
       label: 'meter:rate',
-      property: 'rate',
       value: btuData.rate?.toFixed(1) ?? 0.0,
     },
     {
@@ -77,6 +76,12 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
       value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
     },
   ];
+
+  const DeviceMetric = ({ label, value }: { label: string; value: string | number }) => {
+    const { t } = useTranslation();
+    const { themed } = useAppTheme();
+    return <Text style={themed($label)}>{t(label, { value })}</Text>;
+  };
 
   //TODO: Change to Socket.io in the future based on Github ticket
   useEffect(() => {
@@ -162,38 +167,39 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
                 icon={'power'}
                 label={t('temperature:modes:off')}
                 value={OCCUPANCY_MODE.OFF}
-                currentValue={occupancy!}
+                currentValue={occupancy ?? OCCUPANCY_MODE.OFF}
                 onPress={() => changeOccupancy(OCCUPANCY_MODE.OFF)}
               />
               <OccupancyButton
                 icon={'a'}
                 label={t('temperature:modes:auto')}
                 value={OCCUPANCY_MODE.AUTO}
-                currentValue={occupancy!}
+                currentValue={occupancy ?? OCCUPANCY_MODE.OFF}
                 onPress={() => changeOccupancy(OCCUPANCY_MODE.AUTO)}
               />
               <OccupancyButton
                 icon={'sun'}
                 label={t('temperature:modes:heat')}
                 value={OCCUPANCY_MODE.HEAT}
-                currentValue={occupancy!}
+                currentValue={occupancy ?? OCCUPANCY_MODE.OFF}
                 onPress={() => changeOccupancy(OCCUPANCY_MODE.HEAT)}
               />
               <OccupancyButton
                 icon={'snow'}
                 label={t('temperature:modes:cool')}
                 value={OCCUPANCY_MODE.COOL}
-                currentValue={occupancy!}
+                currentValue={occupancy ?? OCCUPANCY_MODE.OFF}
                 onPress={() => changeOccupancy(OCCUPANCY_MODE.COOL)}
               />
             </View>
           </Card>
           <DeviceCard imageSrc={meterImage} deviceName="Fortis BC Suite Meter">
             <View>
-              {devicesArray.map((device, index) => {
+              {devicesArray.map((item, index) => {
+                <DeviceMetric label={item.label} key={index} value={item.value} />;
                 return (
                   <Text key={index} style={themed($label)}>
-                    {t(device.label, { value: device.value })}
+                    {t(item.label, { value: item.value })}
                   </Text>
                 );
               })}
