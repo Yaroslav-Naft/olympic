@@ -18,7 +18,6 @@ import { useDateTime } from '@/components/hooks/api-queries/useDateTime';
 import { useTemperature } from '@/components/hooks/api-queries/useTemperature';
 import { useTempSetpoint } from '@/components/hooks/api-mutations/useTempSetpoint';
 import { useBTUMeter } from '@/components/hooks/api-queries/useBTUMeter';
-import { DefaultDeviceState, useWaterMeter } from '@/components/hooks/api-queries/useWaterMeter';
 import { useOccupancy } from '@/components/hooks/api-mutations/useOccupancy';
 import { useWeather } from '@/components/hooks/api-queries/useWeather';
 import { useHumidity } from '@/components/hooks/api-queries/useHumidity';
@@ -27,8 +26,8 @@ import { useRefreshAllData } from '@/components/hooks/api-queries/useRefreshAllD
 import { OccupancyButton } from '@/components/OccupancyButton';
 import { WaterDetectorCard } from '@/components/WaterDetectorCard';
 
-const meterImage = require('../../assets/images/meter.png');
-const waterDetector = require('../../assets/images/waterDetector.jpg');
+const meterImage: ImageSourcePropType = require('../../assets/images/meter.png');
+const waterDetector: ImageSourcePropType = require('../../assets/images/waterDetector.jpg');
 
 export function TempSwitch(props: SwitchToggleProps) {
   const [val, setVal] = useState(props.value || false);
@@ -53,7 +52,6 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
   const { dateTime, dateTimeLoading } = useDateTime();
   const { occupancy, changeOccupancy } = useOccupancy();
   const { btuData } = useBTUMeter();
-  const { waterData } = useWaterMeter();
   const { weather } = useWeather();
 
   const refreshAllData = useRefreshAllData();
@@ -67,7 +65,6 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
     component?: JSX.Element;
   };
 
-  //TODO: Add type to this
   const deviceConfigs: DeviceConfig[] = [
     {
       name: 'meter:fortisBcSuite',
@@ -93,7 +90,7 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
     },
     {
       name: 'waterDetector:title',
-      imageSrc: meterImage,
+      imageSrc: waterDetector,
       component: <WaterDetectorCard />,
     },
   ];
@@ -125,7 +122,11 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
             profileName={t('profile:location')}
           />
           <Card
-            heading={`${temp?.toFixed(2) ?? '--'}°C`}
+            heading={
+              temp !== null
+                ? t('temperature:indoorValue', { temp: temp?.toFixed(2) })
+                : t('temperature:placeholder')
+            }
             style={themed($temperatureCard)}
             headingStyle={themed($temperatureHeading)}
             content={t('temperature:indoorTemp')}
@@ -134,23 +135,29 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
               <View style={$footerContainer}>
                 <View style={$footerItem}>
                   <Text style={themed($footerText)}>
-                    {t('temperature:outdoorTemp', {
-                      temp: weather?.outdoorAirTemp ?? '--',
-                    })}
+                    {weather?.outdoorAirTemp
+                      ? t('temperature:outdoorTemp', {
+                          temp: weather?.outdoorAirTemp,
+                        })
+                      : t('temperature:placeholder')}
                     |{' '}
                   </Text>
                 </View>
                 <View style={$footerItem}>
                   <Text style={themed($footerText)}>
-                    {t('temperature:humidity', {
-                      humidity: humidity?.toFixed(1) ?? '--',
-                    })}
+                    {humidity?.toFixed(1)
+                      ? t('temperature:humidity', {
+                          humidity: humidity?.toFixed(1),
+                        })
+                      : t('temperature:humidityPlaceholder')}
                     |{' '}
                   </Text>
                 </View>
                 <View style={$footerItem}>
                   <Text style={themed($footerText)}>
-                    {t('temperature:date', { date: dateTime.date })}
+                    {dateTime.date
+                      ? t('temperature:date', { date: dateTime.date })
+                      : t('temperature:datePlaceholder')}
                   </Text>
                 </View>
               </View>
@@ -214,14 +221,6 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
               />
             </View>
           </Card>
-          <DeviceCard imageSrc={meterImage} deviceName="Fortis BC Suite Meter">
-            <View>
-              {deviceConfigs[0]?.metrics?.map((item, index) => (
-                <DeviceMetric key={index} label={item.label} value={item.value} />
-              ))}
-            </View>
-          </DeviceCard>
-
           {deviceConfigs.map((device, index) => (
             <DeviceCard key={index} imageSrc={device.imageSrc} deviceName={t(device.name)}>
               <View>
@@ -287,12 +286,6 @@ const $temperatureContent: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
 const $footerContainer: ViewStyle = {
   flexDirection: 'row',
   alignItems: 'center',
-};
-
-const $valveDetectorContainer: ViewStyle = {};
-
-const $valveContainer: ViewStyle = {
-  flexDirection: 'column',
 };
 
 const $detectorContainer: ViewStyle = {

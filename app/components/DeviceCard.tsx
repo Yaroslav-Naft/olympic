@@ -1,19 +1,11 @@
-import {
-  View,
-  ViewStyle,
-  TextStyle,
-  Image,
-  ImageSourcePropType,
-  ImageStyle,
-  StyleProp,
-} from 'react-native';
+import { View, ViewStyle, TextStyle, Image, ImageSourcePropType, ImageStyle } from 'react-native';
 import { Card } from './Card';
-import { Icon, Text } from '../components';
+import { Text } from '../components';
 import type { ThemedStyle } from '@/theme';
 import { useAppTheme } from '@/utils/useAppTheme';
 
 interface DeviceCardProps {
-  imageSrc: string;
+  imageSrc: ImageSourcePropType;
   deviceName: string;
   children?: React.ReactNode;
 }
@@ -24,7 +16,7 @@ export const DeviceCard = ({ imageSrc, deviceName, children }: DeviceCardProps) 
     <Card style={themed($temperatureCard)}>
       <View style={themed($contentContainer)}>
         <View style={themed($iconButtonContainer)}>
-          <Image source={imageSrc as ImageSourcePropType | undefined} style={themed($imageStyle)} />
+          <Image source={imageSrc} style={themed($imageStyle)} />
           <View style={themed($greetingContainer)}>
             <Text style={themed($content)}>{deviceName}</Text>
           </View>

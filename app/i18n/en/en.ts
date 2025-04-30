@@ -1,5 +1,5 @@
 import demoEn from './demo-en';
-import homeScreen from './homescreen-en';
+import homeScreen from './homescreen';
 
 const en = {
   common: {
@@ -82,11 +82,6 @@ const en = {
       "Whether it's running a full project or getting teams up to speed with our hands-on training, Infinite Red can help with just about any React Native project.",
     hireUsLink: 'Send us a message',
   },
-  // homeScreen: {
-  //   title: 'Fortis BC @ 1111 West Georgia St',
-  //   tagLine: 'Welcome to Your Portal!🤗🤗🤗',
-  //   indoorTemp: 'Indoor Temperature',
-  // },
   demoShowroomScreen: {
     jumpStart: 'Components to jump start your project!',
     lorem2Sentences:

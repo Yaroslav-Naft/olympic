@@ -1,5 +1,5 @@
 import demoFr from './demo-fr';
-import homeScreen from './homescreen-fr';
+import homeScreen from './homescreen';
 
 const fr = {
   common: {
