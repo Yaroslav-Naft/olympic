@@ -55,11 +55,9 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
   const { weather } = useWeather();
 
   const refreshAllData = useRefreshAllData();
-
+  const REFRESH_INTERVAL_MS = 10 * 60 * 1000;
   const isLoading = tempLoading || spLoading || dateTimeLoading || humidityLoading;
 
-  //Todo: Think about how to abstract this in best practices
-  //Device Card Renderer abstraction
   const devicesArray = [
     {
       label: 'meter:rate',
@@ -83,7 +81,7 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
   //TODO: Change to Socket.io in the future based on Github ticket
   useEffect(() => {
     refreshAllData();
-    const interval = setInterval(refreshAllData, 6000000);
+    const interval = setInterval(refreshAllData, REFRESH_INTERVAL_MS);
     return () => clearInterval(interval);
   }, [refreshAllData]);
 
