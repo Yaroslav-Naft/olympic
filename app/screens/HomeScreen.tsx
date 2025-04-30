@@ -17,6 +17,7 @@ import { useWeather } from '@/components/hooks/api-queries/useWeather';
 import { useHumidity } from '@/components/hooks/api-queries/useHumidity';
 import { useTranslation } from 'react-i18next';
 import { useRefreshAllData } from '@/components/hooks/api-queries/useRefreshAllData';
+import { OccupancyButton } from '@/components/OccupancyButton';
 
 const meterImage = require('../../assets/images/meter.png');
 const sensor2 = require('../../assets/images/sensor2.jpg');
@@ -31,46 +32,29 @@ enum Colors {
   RED = 'red',
 }
 
+enum OCCUPANCY_MODE {
+  OFF = '7',
+  AUTO = '1',
+  HEAT = '2',
+  COOL = '4',
+}
+
 type DemoTabs = 'Home' | 'Calendar' | 'Comfort' | 'Settings';
 
 export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(_props) {
   const { t } = useTranslation();
 
   const { themed } = useAppTheme();
-  const { temp, fetchTemp, tempLoading } = useTemperature();
-  const { humidity, fetchHumidity, humidityLoading } = useHumidity();
-  const { tempSetpoint, incrementTempSp, decrementTempSp, spLoading, fetchTempSp } =
-    useTempSetpoint();
-  const { dateTime, refetchDateTime, dateTimeLoading } = useDateTime();
-  const { occupancy, changeOccupancy, fetchOccupancy } = useOccupancy();
-  const { btuData, fetchSupplyTemp, fetchMonthlyCost, fetchRate, fetchAccumulatedConsumption } =
-    useBTUMeter();
-  const { waterData, fetchShutoffValveStatus, fetchDetectorStatus } = useWaterMeter();
-  const { weather, refetchWeatherTemp, refetchWeatherStatus } = useWeather();
+  const { temp, tempLoading } = useTemperature();
+  const { humidity, humidityLoading } = useHumidity();
+  const { tempSetpoint, incrementTempSp, decrementTempSp, spLoading } = useTempSetpoint();
+  const { dateTime, dateTimeLoading } = useDateTime();
+  const { occupancy, changeOccupancy } = useOccupancy();
+  const { btuData } = useBTUMeter();
+  const { waterData } = useWaterMeter();
+  const { weather } = useWeather();
 
   const refreshAllData = useRefreshAllData();
-
-  // const refreshAllData = useCallback(async () => {
-  //   try {
-  //     await Promise.all([
-  //       fetchTemp(),
-  //       fetchOccupancy(),
-  //       fetchTempSp(),
-  //       refetchDateTime(),
-  //       fetchShutoffValveStatus(),
-  //       fetchDetectorStatus(),
-  //       fetchSupplyTemp(),
-  //       fetchMonthlyCost(),
-  //       fetchRate(),
-  //       fetchAccumulatedConsumption(),
-  //       refetchWeatherTemp(),
-  //       refetchWeatherStatus(),
-  //       fetchHumidity(),
-  //     ]);
-  //   } catch (err) {
-  //     console.error(`error fetching data ${err}`);
-  //   }
-  // }, [fetchTemp, fetchTempSp, refetchDateTime]);
 
   const isLoading = tempLoading || spLoading || dateTimeLoading || humidityLoading;
 
@@ -181,66 +165,34 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
               </View>
             </View>
             <View style={themed($bottomContainer)}>
-              <View>
-                <TouchableOpacity
-                  style={themed(occupancy === '7' ? $iconButtonSelected : $iconButton)}
-                  onPress={() => changeOccupancy('7')}
-                >
-                  <View style={$iconButtonRow}>
-                    <View style={$iconContainer}>
-                      <Icon icon="power" color="#374151" size={15} />
-                    </View>
-                    <View>
-                      <Text size="xs">{t('temperature:modes:off')}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity
-                  style={themed(occupancy === '1' ? $iconButtonSelected : $iconButton)}
-                  onPress={() => changeOccupancy('1')}
-                >
-                  <View style={$iconButtonRow}>
-                    <View style={$iconContainer}>
-                      <Icon icon="a" color="#374151" size={15} />
-                    </View>
-                    <View>
-                      <Text size="xs">{t('temperature:modes:auto')}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity
-                  style={themed(occupancy === '2' ? $iconButtonSelected : $iconButton)}
-                  onPress={() => changeOccupancy('2')}
-                >
-                  <View style={$iconButtonRow}>
-                    <View style={$iconContainer}>
-                      <Icon icon="sun" color="#374151" size={15} />
-                    </View>
-                    <View>
-                      <Text size="xs">{t('temperature:modes:heat')}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity
-                  style={themed(occupancy === '4' ? $iconButtonSelected : $iconButton)}
-                  onPress={() => changeOccupancy('4')}
-                >
-                  <View style={$iconButtonRow}>
-                    <View style={$iconContainer}>
-                      <Icon icon="snow" color="#374151" size={15} />
-                    </View>
-                    <View>
-                      <Text size="xs">{t('temperature:modes:cool')}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
+              <OccupancyButton
+                icon={'power'}
+                label={t('temperature:modes:off')}
+                value={OCCUPANCY_MODE.OFF}
+                currentValue={occupancy!}
+                onPress={() => changeOccupancy(OCCUPANCY_MODE.OFF)}
+              />
+              <OccupancyButton
+                icon={'a'}
+                label={t('temperature:modes:auto')}
+                value={OCCUPANCY_MODE.AUTO}
+                currentValue={occupancy!}
+                onPress={() => changeOccupancy(OCCUPANCY_MODE.AUTO)}
+              />
+              <OccupancyButton
+                icon={'sun'}
+                label={t('temperature:modes:heat')}
+                value={OCCUPANCY_MODE.HEAT}
+                currentValue={occupancy!}
+                onPress={() => changeOccupancy(OCCUPANCY_MODE.HEAT)}
+              />
+              <OccupancyButton
+                icon={'snow'}
+                label={t('temperature:modes:cool')}
+                value={OCCUPANCY_MODE.COOL}
+                currentValue={occupancy!}
+                onPress={() => changeOccupancy(OCCUPANCY_MODE.COOL)}
+              />
             </View>
           </Card>
 
@@ -440,30 +392,6 @@ const $title: ThemedStyle<TextStyle> = ({ spacing }) => ({
 const $spinner: ViewStyle = {
   marginVertical: 20,
 };
-
-const $iconButton: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  width: 80,
-  height: 36,
-  borderRadius: 10,
-  borderWidth: 1,
-  marginRight: 2,
-  borderColor: colors.palette.neutral200,
-  backgroundColor: colors.palette.neutral100,
-  justifyContent: 'center',
-  alignItems: 'center',
-});
-
-const $iconButtonSelected: ThemedStyle<ViewStyle> = () => ({
-  width: 80,
-  height: 36,
-  borderRadius: 10,
-  borderWidth: 1,
-  marginRight: 2,
-  borderColor: '#2563EB',
-  backgroundColor: '#EBF4FF',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
 
 const $contentContainer: ThemedStyle<ViewStyle> = () => ({
   flexDirection: 'row',
