@@ -62,26 +62,21 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
   //Device Card Renderer abstraction
   const devicesArray = [
     {
-      image: meterImage,
-      name: 'Fortis BC Suite Meter',
-      values: [
-        {
-          label: 'meter:rate',
-          value: btuData.rate?.toFixed(1) ?? 0.0,
-        },
-        {
-          label: 'meter:AccumulatedConsumption',
-          value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
-        },
-        {
-          label: 'meter:monthlyCost',
-          value: btuData.monthlyCost?.toFixed(1) ?? 0.0,
-        },
-        {
-          label: 'meter:waterConsumption',
-          value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
-        },
-      ],
+      label: 'meter:rate',
+      property: 'rate',
+      value: btuData.rate?.toFixed(1) ?? 0.0,
+    },
+    {
+      label: 'meter:AccumulatedConsumption',
+      value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
+    },
+    {
+      label: 'meter:monthlyCost',
+      value: btuData.monthlyCost?.toFixed(1) ?? 0.0,
+    },
+    {
+      label: 'meter:waterConsumption',
+      value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
     },
   ];
 
@@ -195,27 +190,15 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
               />
             </View>
           </Card>
-
           <DeviceCard imageSrc={meterImage} deviceName="Fortis BC Suite Meter">
             <View>
-              <Text style={themed($label)}>
-                {t('meter:rate', { rate: btuData.rate?.toString() ?? '0.0' })}
-              </Text>
-              <Text style={themed($label)}>
-                {t('meter:accumulatedConsumption', {
-                  consumption: btuData.accumulatedConsumption?.toFixed(1) ?? '--',
-                })}
-              </Text>
-              <Text style={themed($label)}>
-                {t('meter:monthlyCost', {
-                  cost: btuData.monthlyCost?.toFixed(2) ?? '0.0',
-                })}
-              </Text>
-              <Text style={themed($label)}>
-                {t('meter:waterConsumption', {
-                  consumption: btuData.accumulatedConsumption?.toFixed(1) ?? '--',
-                })}
-              </Text>
+              {devicesArray.map((device, index) => {
+                return (
+                  <Text key={index} style={themed($label)}>
+                    {t(device.label, { value: device.value })}
+                  </Text>
+                );
+              })}
             </View>
           </DeviceCard>
           <DeviceCard imageSrc={sensor2} deviceName="Water Detector">
@@ -286,15 +269,6 @@ const $setpointValueText: ThemedStyle<TextStyle> = () => ({
   backgroundColor: 'transparent',
   paddingTop: 0,
 });
-
-const $iconButtonRow: ViewStyle = {
-  flexDirection: 'row',
-};
-
-const $iconContainer: ViewStyle = {
-  paddingTop: 3,
-  paddingRight: 2,
-};
 
 const $temperatureCard: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   backgroundColor: 'white',
