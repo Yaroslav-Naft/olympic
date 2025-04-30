@@ -17,15 +17,8 @@ import { useWeather } from '@/components/hooks/api-queries/useWeather';
 import { useHumidity } from '@/components/hooks/api-queries/useHumidity';
 import { useTranslation } from 'react-i18next';
 
-import homeScreenEn from '@/i18n/homescreen-en';
-import homescreenFr from '@/i18n/homescreen-fr';
-
 const meterImage = require('../../assets/images/meter.png');
 const sensor2 = require('../../assets/images/sensor2.jpg');
-
-const { i18n } = useTranslation();
-
-const homeScreenTranslations = i18n.language === 'fr' ? homescreenFr : homeScreenEn;
 
 export function TempSwitch(props: SwitchToggleProps) {
   const [val, setVal] = useState(props.value || false);
@@ -40,6 +33,8 @@ enum Colors {
 type DemoTabs = 'Home' | 'Calendar' | 'Comfort' | 'Settings';
 
 export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(_props) {
+  const { t } = useTranslation();
+
   const { themed } = useAppTheme();
   const { temp, fetchTemp, tempLoading } = useTemperature();
   const { humidity, fetchHumidity, humidityLoading } = useHumidity();
@@ -52,243 +47,256 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
   const { waterData, fetchShutoffValveStatus, fetchDetectorStatus } = useWaterMeter();
   const { weather, refetchWeatherTemp, refetchWeatherStatus } = useWeather();
 
-  const refreshAllData = useCallback(async () => {
-    try {
-      await Promise.all([
-        fetchTemp(),
-        fetchOccupancy(),
-        fetchTempSp(),
-        refetchDateTime(),
-        fetchShutoffValveStatus(),
-        fetchDetectorStatus(),
-        fetchSupplyTemp(),
-        fetchMonthlyCost(),
-        fetchRate(),
-        fetchAccumulatedConsumption(),
-        refetchWeatherTemp(),
-        refetchWeatherStatus(),
-        fetchHumidity(),
-      ]);
-    } catch (err) {
-      console.error(`error fetching data ${err}`);
-    }
-  }, [fetchTemp, fetchTempSp, refetchDateTime]);
+  // const refreshAllData = useCallback(async () => {
+  //   try {
+  //     await Promise.all([
+  //       fetchTemp(),
+  //       fetchOccupancy(),
+  //       fetchTempSp(),
+  //       refetchDateTime(),
+  //       fetchShutoffValveStatus(),
+  //       fetchDetectorStatus(),
+  //       fetchSupplyTemp(),
+  //       fetchMonthlyCost(),
+  //       fetchRate(),
+  //       fetchAccumulatedConsumption(),
+  //       refetchWeatherTemp(),
+  //       refetchWeatherStatus(),
+  //       fetchHumidity(),
+  //     ]);
+  //   } catch (err) {
+  //     console.error(`error fetching data ${err}`);
+  //   }
+  // }, [fetchTemp, fetchTempSp, refetchDateTime]);
 
-  const isLoading = tempLoading || spLoading || dateTimeLoading || humidityLoading;
+  // const isLoading = tempLoading || spLoading || dateTimeLoading || humidityLoading;
 
-  useEffect(() => {
-    refreshAllData();
-    const interval = setInterval(refreshAllData, 6000000);
-    return () => clearInterval(interval);
-  }, [refreshAllData]);
+  //TODO: Change to Socket.io based on Github ticket
+  // useEffect(() => {
+  //   refreshAllData();
+  //   const interval = setInterval(refreshAllData, 6000000);
+  //   return () => clearInterval(interval);
+  // }, [refreshAllData]);
+
+  const devicesArray = [
+    {
+      image: meterImage,
+      name: 'Fortis BC Suite Meter',
+      values: [
+        {
+          label: 'meter:rate',
+          value: btuData.rate?.toFixed(1) ?? 0.0,
+        },
+        {
+          label: 'meter:AccumulatedConsumption',
+          value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
+        },
+        {
+          label: 'meter:monthlyCost',
+          value: btuData.monthlyCost?.toFixed(1) ?? 0.0,
+        },
+        {
+          label: 'meter:waterConsumption',
+          value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
+        },
+      ],
+    },
+  ];
 
   return (
     <Screen preset="scroll" contentContainerStyle={$styles.container} safeAreaEdges={['top']}>
-      <Text preset="heading" size="md" text={homeScreenTranslations.title} style={themed($title)} />
-      {isLoading ? (
+      <Text preset="heading" size="md" text={t('title')} style={themed($title)} />
+      {/* {isLoading ? (
         <ActivityIndicator size="large" style={$spinner} />
-      ) : (
-        <View>
-          <ProfileCard
-            iconType="user"
-            size={50}
-            txContent={homeScreenTranslations.profile.greeting}
-            profileName={homeScreenTranslations.profile.location}
-          />
-          <Card
-            heading={`${temp?.toFixed(2) ?? '--'}°C`}
-            style={themed($temperatureCard)}
-            headingStyle={themed($temperatureHeading)}
-            content={homeScreenTranslations.temperature.indoorTemp}
-            contentStyle={themed($temperatureContent)}
-            FooterComponent={
-              <View style={$footerContainer}>
-                <View style={$footerItem}>
-                  <Text style={themed($footerText)}>
-                    {homeScreenTranslations.temperature.outdoorTemp.replace(
-                      '{temp}',
-                      weather?.outdoorAirTemp ?? '--',
-                    )}{' '}
-                    |{' '}
-                  </Text>
-                </View>
-                <View style={$footerItem}>
-                  <Text style={themed($footerText)}>
-                    {homeScreenTranslations.temperature.humidity.replace(
-                      '{humidity}',
-                      humidity?.toFixed(1) ?? '--',
-                    )}{' '}
-                    |{' '}
-                  </Text>
-                </View>
-                <View style={$footerItem}>
-                  <Text style={themed($footerText)}>
-                    {homeScreenTranslations.temperature.date.replace('{date}', dateTime.date)}
-                  </Text>
-                </View>
+      ) : ( */}
+      <View>
+        <ProfileCard
+          iconType="user"
+          size={50}
+          txContent={t('profile:greeting')}
+          profileName={t('profile:location')}
+        />
+        <Card
+          heading={`${temp?.toFixed(2) ?? '--'}°C`}
+          style={themed($temperatureCard)}
+          headingStyle={themed($temperatureHeading)}
+          content={t('temperature:indoorTemp')}
+          contentStyle={themed($temperatureContent)}
+          FooterComponent={
+            <View style={$footerContainer}>
+              <View style={$footerItem}>
+                <Text style={themed($footerText)}>
+                  {t('temperature:outdoorTemp', {
+                    temp: weather?.outdoorAirTemp ?? '--',
+                  })}
+                  |{' '}
+                </Text>
               </View>
-            }
-          />
-          <Card style={[themed($temperatureCard)]}>
-            <View style={themed($tempSetpointContainer)}>
-              <Text style={themed($label)}>
-                {homeScreenTranslations.temperature.setpoint.title}
-              </Text>
-            </View>
-            <View style={themed($contentContainer)}>
-              <View style={themed($setpointValueContainer)}>
-                <Text style={themed($setpointValueText)}>{tempSetpoint?.toFixed(1)}</Text>
+              <View style={$footerItem}>
+                <Text style={themed($footerText)}>
+                  {t('temperature:humidity', {
+                    humidity: humidity?.toFixed(1) ?? '--',
+                  })}
+                  |{' '}
+                </Text>
               </View>
-              <View style={themed($controlsContainer)}>
-                <TouchableOpacity
-                  onPress={() => decrementTempSp(0.5)}
-                  style={themed($controlButton)}
-                >
-                  <Text style={themed($buttonText)}>
-                    {homeScreenTranslations.temperature.setpoint.controls.decrease}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => incrementTempSp(0.5)}
-                  style={themed($controlButton)}
-                >
-                  <Text style={themed($buttonText)}>
-                    {homeScreenTranslations.temperature.setpoint.controls.increase}
-                  </Text>
-                </TouchableOpacity>
+              <View style={$footerItem}>
+                <Text style={themed($footerText)}>
+                  {t('temperature:date', { date: dateTime.date })}
+                </Text>
               </View>
             </View>
-            <View style={themed($bottomContainer)}>
-              <View>
-                <TouchableOpacity
-                  style={themed(occupancy === '7' ? $iconButtonSelected : $iconButton)}
-                  onPress={() => changeOccupancy('7')}
-                >
-                  <View style={$iconButtonRow}>
-                    <View style={$iconContainer}>
-                      <Icon icon="power" color="#374151" size={15} />
-                    </View>
-                    <View>
-                      <Text size="xs"> {homeScreenTranslations.temperature.modes.off}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity
-                  style={themed(occupancy === '1' ? $iconButtonSelected : $iconButton)}
-                  onPress={() => changeOccupancy('1')}
-                >
-                  <View style={$iconButtonRow}>
-                    <View style={$iconContainer}>
-                      <Icon icon="a" color="#374151" size={15} />
-                    </View>
-                    <View>
-                      <Text size="xs"> {homeScreenTranslations.temperature.modes.auto}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity
-                  style={themed(occupancy === '2' ? $iconButtonSelected : $iconButton)}
-                  onPress={() => changeOccupancy('2')}
-                >
-                  <View style={$iconButtonRow}>
-                    <View style={$iconContainer}>
-                      <Icon icon="sun" color="#374151" size={15} />
-                    </View>
-                    <View>
-                      <Text size="xs"> {homeScreenTranslations.temperature.modes.heat}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity
-                  style={themed(occupancy === '4' ? $iconButtonSelected : $iconButton)}
-                  onPress={() => changeOccupancy('4')}
-                >
-                  <View style={$iconButtonRow}>
-                    <View style={$iconContainer}>
-                      <Icon icon="snow" color="#374151" size={15} />
-                    </View>
-                    <View>
-                      <Text size="xs"> {homeScreenTranslations.temperature.modes.cool}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
+          }
+        />
+        <Card style={[themed($temperatureCard)]}>
+          <View style={themed($tempSetpointContainer)}>
+            <Text style={themed($label)}>{t('temperature:setpoint:title')}</Text>
+          </View>
+          <View style={themed($contentContainer)}>
+            <View style={themed($setpointValueContainer)}>
+              <Text style={themed($setpointValueText)}>{tempSetpoint?.toFixed(1)}</Text>
             </View>
-          </Card>
-          <DeviceCard imageSrc={meterImage} deviceName="Fortis BC Suite Meter">
+            <View style={themed($controlsContainer)}>
+              <TouchableOpacity onPress={() => decrementTempSp(0.5)} style={themed($controlButton)}>
+                <Text style={themed($buttonText)}>
+                  {t('temperature:setpoint:controls:decrease')}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => incrementTempSp(0.5)} style={themed($controlButton)}>
+                <Text style={themed($buttonText)}>
+                  {t('temperature:setpoint:controls:increase')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={themed($bottomContainer)}>
             <View>
+              <TouchableOpacity
+                style={themed(occupancy === '7' ? $iconButtonSelected : $iconButton)}
+                onPress={() => changeOccupancy('7')}
+              >
+                <View style={$iconButtonRow}>
+                  <View style={$iconContainer}>
+                    <Icon icon="power" color="#374151" size={15} />
+                  </View>
+                  <View>
+                    <Text size="xs">{t('temperature:modes:off')}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={themed(occupancy === '1' ? $iconButtonSelected : $iconButton)}
+                onPress={() => changeOccupancy('1')}
+              >
+                <View style={$iconButtonRow}>
+                  <View style={$iconContainer}>
+                    <Icon icon="a" color="#374151" size={15} />
+                  </View>
+                  <View>
+                    <Text size="xs">{t('temperature:modes:auto')}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={themed(occupancy === '2' ? $iconButtonSelected : $iconButton)}
+                onPress={() => changeOccupancy('2')}
+              >
+                <View style={$iconButtonRow}>
+                  <View style={$iconContainer}>
+                    <Icon icon="sun" color="#374151" size={15} />
+                  </View>
+                  <View>
+                    <Text size="xs">{t('temperature:modes:heat')}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={themed(occupancy === '4' ? $iconButtonSelected : $iconButton)}
+                onPress={() => changeOccupancy('4')}
+              >
+                <View style={$iconButtonRow}>
+                  <View style={$iconContainer}>
+                    <Icon icon="snow" color="#374151" size={15} />
+                  </View>
+                  <View>
+                    <Text size="xs">{t('temperature:modes:cool')}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Card>
+        <DeviceCard imageSrc={meterImage} deviceName="Fortis BC Suite Meter">
+          <View>
+            <Text style={themed($label)}>
+              {t('meter:rate', { rate: btuData.rate?.toString() ?? '0.0' })}
+            </Text>
+            <Text style={themed($label)}>
+              {t('meter:accumulatedConsumption', {
+                consumption: btuData.accumulatedConsumption?.toFixed(1) ?? '--',
+              })}
+            </Text>
+            <Text style={themed($label)}>
+              {t('meter:monthlyCost', {
+                cost: btuData.monthlyCost?.toFixed(2) ?? '0.0',
+              })}
+            </Text>
+            <Text style={themed($label)}>
+              {t('meter:waterConsumption', {
+                consumption: btuData.accumulatedConsumption?.toFixed(1) ?? '--',
+              })}
+            </Text>
+          </View>
+        </DeviceCard>
+        <DeviceCard imageSrc={sensor2} deviceName="Water Detector">
+          <View style={$valveDetectorContainer}>
+            <View style={$valveContainer}>
               <Text style={themed($label)}>
-                {homeScreenTranslations.meter.rate.replace(
-                  '{rate}',
-                  btuData.rate?.toString() ?? '0.0',
-                )}
-              </Text>
-              <Text style={themed($label)}>
-                {homeScreenTranslations.meter.accumulatedConsumption.replace(
-                  '{consumption}',
-                  btuData.accumulatedConsumption?.toFixed(1) ?? '--',
-                )}
-              </Text>
-              <Text style={themed($label)}>
-                {homeScreenTranslations.meter.monthlyCost.replace(
-                  '{cost}',
-                  btuData.monthlyCost?.toFixed(2) ?? '0.0',
-                )}
-              </Text>
-              <Text style={themed($label)}>
-                {homeScreenTranslations.meter.waterConsumption.replace(
-                  '{consumption}',
-                  btuData.accumulatedConsumption?.toFixed(1) ?? '--',
-                )}
+                {t('waterDetector:valveStatus:title')}{' '}
+                <Text
+                  style={{
+                    color:
+                      waterData?.valveStatus === DefaultDeviceState.Active
+                        ? Colors.RED
+                        : Colors.GREEN,
+                  }}
+                >
+                  {t(
+                    waterData?.valveStatus === DefaultDeviceState.Active
+                      ? 'waterDetector:valveStatus:closed'
+                      : 'waterDetector:valveStatus:open',
+                  )}
+                </Text>
               </Text>
             </View>
-          </DeviceCard>
-          <DeviceCard imageSrc={sensor2} deviceName="Water Detector">
-            <View style={$valveDetectorContainer}>
-              <View style={$valveContainer}>
-                <Text style={themed($label)}>
-                  {homeScreenTranslations.waterDetector.valveStatus.title}{' '}
-                  <Text
-                    style={{
-                      color:
-                        waterData?.valveStatus === DefaultDeviceState.Active
-                          ? Colors.RED
-                          : Colors.GREEN,
-                    }}
-                  >
-                    {waterData?.valveStatus === DefaultDeviceState.Active
-                      ? homeScreenTranslations.waterDetector.valveStatus.closed
-                      : homeScreenTranslations.waterDetector.valveStatus.open}
-                  </Text>
+            <View style={$detectorContainer}>
+              <Text style={themed($label)}>
+                {t('waterDetector:detectorStatus:title')}{' '}
+                <Text
+                  style={{
+                    color:
+                      waterData?.detectorStatus === DefaultDeviceState.Active
+                        ? Colors.RED
+                        : Colors.GREEN,
+                  }}
+                >
+                  {t(
+                    waterData?.detectorStatus === DefaultDeviceState.Active
+                      ? 'waterDetector:detectorStatus:leak'
+                      : 'waterDetector:detectorStatus:noLeak',
+                  )}
                 </Text>
-              </View>
-              <View style={$detectorContainer}>
-                <Text style={themed($label)}>
-                  {homeScreenTranslations.waterDetector.detectorStatus.title}{' '}
-                  <Text
-                    style={{
-                      color:
-                        waterData?.detectorStatus === DefaultDeviceState.Active
-                          ? Colors.RED
-                          : Colors.GREEN,
-                    }}
-                  >
-                    {waterData?.detectorStatus === DefaultDeviceState.Active
-                      ? homeScreenTranslations.waterDetector.detectorStatus.leak
-                      : homeScreenTranslations.waterDetector.detectorStatus.noLeak}
-                  </Text>
-                </Text>
-              </View>
+              </Text>
             </View>
-          </DeviceCard>
-        </View>
-      )}
+          </View>
+        </DeviceCard>
+      </View>
     </Screen>
   );
 };

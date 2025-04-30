@@ -1,12 +1,12 @@
-const homescreenFr = {
-  title: 'ECY - STAT',
+const homeScreen = {
   profile: {
+    title: 'ECY - STAT',
     greeting: 'Bonjour 👋',
     location: 'Fortis BC @ 1111 West Georgia St',
   },
   temperature: {
     indoorTemp: 'Température intérieure',
-    outdoorTemp: '🌥 {temp}°C',
+    outdoorTemp: '🌥 {temp} °C',
     humidity: '💨 {humidity}% HR',
     date: '📅 {date}',
     setpoint: {
@@ -43,5 +43,5 @@ const homescreenFr = {
   },
 };
 
-export default homescreenFr;
-export type DemoTranslations = typeof homescreenFr;
+export default homeScreen;
+export type DemoTranslations = typeof homeScreen;

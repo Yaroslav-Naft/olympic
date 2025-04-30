@@ -1,4 +1,4 @@
-const homescreenEn = {
+const homeScreen = {
   title: 'ECY - STAT',
   profile: {
     greeting: 'Hello 👋',
@@ -6,9 +6,9 @@ const homescreenEn = {
   },
   temperature: {
     indoorTemp: 'Indoor Temperature',
-    outdoorTemp: '🌥 {temp}°C',
-    humidity: '💨 {humidity}% RH',
-    date: '📅 {date}',
+    outdoorTemp: '🌥 {{temp}}°C',
+    humidity: '💨 {{humidity}}% RH',
+    date: '📅 {{date}}',
     setpoint: {
       title: 'Temperature Set Point',
       controls: {
@@ -24,10 +24,10 @@ const homescreenEn = {
     },
   },
   meter: {
-    rate: 'Rate: {rate} BTU/hr',
-    accumulatedConsumption: 'Accum. Consumption: {consumption} BTU',
-    monthlyCost: 'Monthly Cost: {cost} $ (CAD)',
-    waterConsumption: 'DCW Meter Consumption: {consumption} L',
+    rate: 'Rate: {{rate}} BTU/hr',
+    accumulatedConsumption: 'Accum. Consumption: {{consumption}} BTU',
+    monthlyCost: 'Monthly Cost: {{cost}} $ (CAD)',
+    waterConsumption: 'DCW Meter Consumption: {{consumption}} L',
   },
   waterDetector: {
     valveStatus: {
@@ -43,5 +43,5 @@ const homescreenEn = {
   },
 };
 
-export default homescreenEn;
-export type DemoTranslations = typeof homescreenEn;
+export default homeScreen;
+export type DemoTranslations = typeof homeScreen;
