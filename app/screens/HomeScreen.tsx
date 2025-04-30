@@ -18,18 +18,14 @@ import { useHumidity } from '@/components/hooks/api-queries/useHumidity';
 import { useTranslation } from 'react-i18next';
 import { useRefreshAllData } from '@/components/hooks/api-queries/useRefreshAllData';
 import { OccupancyButton } from '@/components/OccupancyButton';
+import { WaterDetectorCard } from '@/components/WaterDetectorCard';
 
 const meterImage = require('../../assets/images/meter.png');
-const sensor2 = require('../../assets/images/sensor2.jpg');
+const waterDetector = require('../../assets/images/waterDetector.jpg');
 
 export function TempSwitch(props: SwitchToggleProps) {
   const [val, setVal] = useState(props.value || false);
   return <Switch value={val} onPress={() => setVal(!val)} />;
-}
-
-enum Colors {
-  GREEN = 'green',
-  RED = 'red',
 }
 
 enum OCCUPANCY_MODE {
@@ -43,7 +39,6 @@ type DemoTabs = 'Home' | 'Calendar' | 'Comfort' | 'Settings';
 
 export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(_props) {
   const { t } = useTranslation();
-
   const { themed } = useAppTheme();
   const { temp, tempLoading } = useTemperature();
   const { humidity, humidityLoading } = useHumidity();
@@ -58,22 +53,41 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
   const REFRESH_INTERVAL_MS = 10 * 60 * 1000;
   const isLoading = tempLoading || spLoading || dateTimeLoading || humidityLoading;
 
-  const devicesArray = [
+  type DeviceConfig = {
+    name: string;
+    imageSrc: ImageSourcePropType;
+    metrics?: { label: string; value: number | string }[];
+    component?: JSX.Element;
+  };
+
+  //TODO: Add type to this
+  const deviceConfigs: DeviceConfig[] = [
     {
-      label: 'meter:rate',
-      value: btuData.rate?.toFixed(1) ?? 0.0,
+      name: 'meter:fortisBcSuite',
+      imageSrc: meterImage,
+      metrics: [
+        {
+          label: 'meter:rate',
+          value: btuData.rate?.toFixed(1) ?? 0.0,
+        },
+        {
+          label: 'meter:AccumulatedConsumption',
+          value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
+        },
+        {
+          label: 'meter:monthlyCost',
+          value: btuData.monthlyCost?.toFixed(1) ?? 0.0,
+        },
+        {
+          label: 'meter:waterConsumption',
+          value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
+        },
+      ],
     },
     {
-      label: 'meter:AccumulatedConsumption',
-      value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
-    },
-    {
-      label: 'meter:monthlyCost',
-      value: btuData.monthlyCost?.toFixed(1) ?? 0.0,
-    },
-    {
-      label: 'meter:waterConsumption',
-      value: btuData.accumulatedConsumption?.toFixed(1) ?? 0.0,
+      name: 'waterDetector:title',
+      imageSrc: meterImage,
+      component: WaterDetectorCard,
     },
   ];
 
@@ -195,58 +209,22 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
           </Card>
           <DeviceCard imageSrc={meterImage} deviceName="Fortis BC Suite Meter">
             <View>
-              {devicesArray.map((item, index) => {
-                <DeviceMetric label={item.label} key={index} value={item.value} />;
-                return (
-                  <Text key={index} style={themed($label)}>
-                    {t(item.label, { value: item.value })}
-                  </Text>
-                );
-              })}
+              {deviceConfigs[0]?.metrics?.map((item, index) => (
+                <DeviceMetric key={index} label={item.label} value={item.value} />
+              ))}
             </View>
           </DeviceCard>
-          <DeviceCard imageSrc={sensor2} deviceName="Water Detector">
-            <View style={$valveDetectorContainer}>
-              <View style={$valveContainer}>
-                <Text style={themed($label)}>
-                  {t('waterDetector:valveStatus:title')}{' '}
-                  <Text
-                    style={{
-                      color:
-                        waterData?.valveStatus === DefaultDeviceState.Active
-                          ? Colors.RED
-                          : Colors.GREEN,
-                    }}
-                  >
-                    {t(
-                      waterData?.valveStatus === DefaultDeviceState.Active
-                        ? 'waterDetector:valveStatus:closed'
-                        : 'waterDetector:valveStatus:open',
-                    )}
-                  </Text>
-                </Text>
+
+          {deviceConfigs.map((device, index) => (
+            <DeviceCard key={index} imageSrc={device.imageSrc} deviceName={t(device.name)}>
+              <View>
+                {device.component ??
+                  device.metrics?.map((metric, j) => (
+                    <DeviceMetric key={j} label={metric.label} value={metric.value} />
+                  ))}
               </View>
-              <View style={$detectorContainer}>
-                <Text style={themed($label)}>
-                  {t('waterDetector:detectorStatus:title')}{' '}
-                  <Text
-                    style={{
-                      color:
-                        waterData?.detectorStatus === DefaultDeviceState.Active
-                          ? Colors.RED
-                          : Colors.GREEN,
-                    }}
-                  >
-                    {t(
-                      waterData?.detectorStatus === DefaultDeviceState.Active
-                        ? 'waterDetector:detectorStatus:leak'
-                        : 'waterDetector:detectorStatus:noLeak',
-                    )}
-                  </Text>
-                </Text>
-              </View>
-            </View>
-          </DeviceCard>
+            </DeviceCard>
+          ))}
         </View>
       )}
     </Screen>
