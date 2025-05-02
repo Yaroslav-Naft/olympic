@@ -3,6 +3,7 @@ import { parse } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 
 interface DateTime {
+  fetchDateTime: () => Promise<void>;
   timeZone: string;
   time: string;
   date: string;
@@ -65,6 +66,6 @@ export function useDateTime() {
     dateTime,
     error,
     dateTimeLoading,
-    refetchDateTime: fetchDateTime,
+    fetchDateTime,
   };
 }

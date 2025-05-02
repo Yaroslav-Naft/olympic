@@ -26,7 +26,6 @@ export const DeviceCard = ({ imageSrc, deviceName, children }: DeviceCardProps) 
     </Card>
   );
 };
-
 const $temperatureCard: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   borderRadius: 16,
   padding: spacing.md,

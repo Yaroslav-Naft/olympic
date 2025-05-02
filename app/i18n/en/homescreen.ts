@@ -30,10 +30,10 @@ const homeScreen = {
   },
   meter: {
     fortisBCSuite: 'Fortis BC Suite Meter',
-    rate: 'Rate: {{rate}} BTU/hr',
-    accumulatedConsumption: 'Accum. Consumption: {{consumption}} BTU',
-    monthlyCost: 'Monthly Cost: {{cost}} $ (CAD)',
-    waterConsumption: 'DCW Meter Consumption: {{consumption}} L',
+    rate: 'Rate: {{value}} BTU/hr',
+    accumulatedConsumption: 'Accum. Consumption: {{value}} BTU',
+    monthlyCost: 'Monthly Cost: {{value}} $',
+    waterConsumption: 'DCW Meter Consumption: {{value}} L',
   },
   waterDetector: {
     title: 'Water Detector',

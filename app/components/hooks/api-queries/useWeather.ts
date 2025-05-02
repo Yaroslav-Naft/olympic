@@ -2,6 +2,8 @@ import { api } from '@/services/api/api';
 import { useCallback, useState } from 'react';
 
 interface Weather {
+  refetchWeatherTemp: () => Promise<void>;
+  refetchWeatherStatus: () => Promise<void>;
   outdoorAirTemp: string;
   status: string;
 }
@@ -69,7 +71,7 @@ export function useWeather() {
     weather,
     error,
     isLoading,
-    refetchWeatherTemp: fetchWeatherTemp,
-    refetchWeatherStatus: fetchWeatherStatus,
+    fetchWeatherTemp,
+    fetchWeatherStatus,
   };
 }
