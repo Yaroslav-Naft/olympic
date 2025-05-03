@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { ImageSourcePropType, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Card, Screen, Switch, SwitchToggleProps, Text } from '@/components';
-import { DemoTabScreenProps, DeviceConfig } from '@/types';
+import { DemoTabScreenProps, DeviceConfig, IconType } from '@/types';
 import { $styles } from '@/theme';
 import type { ThemedStyle } from '@/theme';
 import { useAppTheme } from '@/utils/useAppTheme';
@@ -28,12 +28,12 @@ export function TempSwitch(props: SwitchToggleProps) {
   return <Switch value={val} onPress={() => setVal(!val)} />;
 }
 
-enum OCCUPANCY_MODE {
-  OFF = '7',
-  AUTO = '1',
-  HEAT = '2',
-  COOL = '4',
-}
+export const OCCUPANCY_MODES = {
+  OFF: { id: '7', label: 'Off', icon: 'power' },
+  AUTO: { id: '1', label: 'Auto', icon: 'a' },
+  HEAT: { id: '2', label: 'Heat', icon: 'sun' },
+  COOL: { id: '4', label: 'Cool', icon: 'snow' },
+};
 
 type DemoTabs = 'Home' | 'Calendar' | 'Comfort' | 'Settings';
 
@@ -67,14 +67,8 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
     fetchWeatherStatus,
   });
 
-  useEffect(() => {
-    refreshAllData();
-    const interval = setInterval(refreshAllData, 10 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, [refreshAllData]);
-
   const REFRESH_INTERVAL_MS = 10 * 60 * 1000;
-  //PAUSED for now
+  //Todo: Re-implement later
   // const isLoading = tempLoading || spLoading || dateTimeLoading || humidityLoading;
 
   const deviceConfigs: DeviceConfig[] = [
@@ -198,34 +192,18 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
             </View>
           </View>
           <View style={themed($bottomContainer)}>
-            <OccupancyButton
-              icon={'power'}
-              label={t('temperature:modes:off')}
-              value={OCCUPANCY_MODE.OFF}
-              currentValue={occupancy ?? OCCUPANCY_MODE.OFF}
-              onPress={() => changeOccupancy(OCCUPANCY_MODE.OFF)}
-            />
-            <OccupancyButton
-              icon={'a'}
-              label={t('temperature:modes:auto')}
-              value={OCCUPANCY_MODE.AUTO}
-              currentValue={occupancy ?? OCCUPANCY_MODE.OFF}
-              onPress={() => changeOccupancy(OCCUPANCY_MODE.AUTO)}
-            />
-            <OccupancyButton
-              icon={'sun'}
-              label={t('temperature:modes:heat')}
-              value={OCCUPANCY_MODE.HEAT}
-              currentValue={occupancy ?? OCCUPANCY_MODE.OFF}
-              onPress={() => changeOccupancy(OCCUPANCY_MODE.HEAT)}
-            />
-            <OccupancyButton
-              icon={'snow'}
-              label={t('temperature:modes:cool')}
-              value={OCCUPANCY_MODE.COOL}
-              currentValue={occupancy ?? OCCUPANCY_MODE.OFF}
-              onPress={() => changeOccupancy(OCCUPANCY_MODE.COOL)}
-            />
+            {Object.values(OCCUPANCY_MODES).map((mode) => {
+              return (
+                <OccupancyButton
+                  key={mode.id}
+                  icon={mode.icon as IconType}
+                  label={t(`temperature:modes:${mode.label.toLocaleLowerCase()}`)}
+                  value={mode.id}
+                  currentValue={occupancy ?? OCCUPANCY_MODES.OFF.id}
+                  onPress={() => changeOccupancy(mode.id)}
+                />
+              );
+            })}
           </View>
         </Card>
         {deviceConfigs.map((device, index) => (
@@ -239,7 +217,6 @@ export const HomeScreen: FC<DemoTabScreenProps<DemoTabs>> = function HomeScreen(
           </DeviceCard>
         ))}
       </View>
-      {/* )} */}
     </Screen>
   );
 };
