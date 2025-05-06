@@ -1,4 +1,5 @@
 import demoFr from './demo-fr';
+import homeScreen from './homescreen';
 
 const fr = {
   common: {
@@ -137,7 +138,7 @@ const fr = {
         "Aucun favori n'a encore été ajouté. Appuyez sur le cœur d'un épisode pour l'ajouter à vos favoris !",
     },
   },
-
+  ...homeScreen,
   ...demoFr,
 };
 

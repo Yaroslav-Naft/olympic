@@ -30,7 +30,6 @@
     "serve:web": "npx serve dist",
     "prebuild:clean": "npx expo prebuild --clean",
     "prepare": "husky"
-
   },
   "dependencies": {
     "@expo-google-fonts/space-grotesk": "^0.2.2",
